@@ -1,0 +1,6 @@
+[submodule "virtual_maize_field"]
+	path = virtual_maize_field
+	url = https://github.com/FieldRobotEvent/virtual_maize_field.git
+[submodule "src/virtual_maize_field"]
+	path = src/virtual_maize_field
+	url = https://github.com/FieldRobotEvent/virtual_maize_field.git

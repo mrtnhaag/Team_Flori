@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Floribot">
+
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="red">
+    <color rgba="0.8 0 0 1"/>
+  </material>
+  
+  <material name="green">
+    <color rgba="0 0.8 0 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+  <!-- macro grey color for gazbeo -->
+<xacro:macro name= "darkGreyColor" params = "linkName">
+  <gazebo reference="${linkName}">
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+</xacro:macro>
+
+    <!-- add laserscanners -->
+  <xacro:include filename="$(find sick_scan)/urdf/sick_scan.urdf.xacro" />
+
+  <!-- laser parameter -->
+  <xacro:property name="x_laser_front" value="0.3315" />
+  <xacro:property name="x_laser_back" value="-0.33" />
+  <xacro:property name="laser_height" value="0.03" />
+
+  <!-- wagon parameter -->
+<xacro:property name="height_wagon" value="0.363" />
+<xacro:property name="width_wagon" value="0.213" />
+<xacro:property name="length_wagon_front" value="0.635" />
+<xacro:property name="length_wagon_rear" value="0.605" />
+
+<!--articulated joint parameter -->
+<xacro:property name="radius" value="0.008" />
+<xacro:property name="vertical_length" value="0.06" />
+<xacro:property name="horizontal_length" value="0.055" />
+<xacro:property name="wheel_joint_2_mid_joint" value="0.383" />
+<xacro:property name="joint_height" value="0.015" />
+
+  <link name="base_link" />
+
+  <link name="axesFront" />
+
+  <link name="axesRear" />
+
+  <link name="front_wagon">
+    <visual>
+      <geometry>
+        <box size="0.554 0.3 0.3"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.554 0.3 0.3"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.23"/>
+      <material name="blue"/>
+    </collision>
+    <inertial>
+      <mass value="30"/>
+      <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>  
+  </link>
+
+  <link name="rear_wagon">
+    <visual>
+      <geometry>
+        <box size="0.554 0.3 0.3"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.554 0.3 0.3"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.23"/>
+      <material name="blue"/>
+    </collision>
+    <inertial>
+      <mass value="30"/>
+      <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>  
+  </link>
+  
+<!-- connection part 1 of the articulated joint (vertical one) -->   
+<link name="jointFront">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+    <geometry>
+      <cylinder length="${vertical_length}" radius="${radius}"/>
+    </geometry>
+    <material name="r">
+      <color rgba="0.9 0 0 1.0"/>
+    </material>
+  </visual>
+
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <cylinder length="${vertical_length}" radius="${radius}"/>
+    </geometry>
+  </collision>
+
+  <inertial>
+    <mass value="0.01"/>
+    <inertia ixx="0.000004" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.000004"/>
+  </inertial>
+</link>
+
+<!-- gazebo color -->
+<xacro:darkGreyColor linkName = "jointFront" />
+
+<!-- connection part 2 -->
+<link name="jointRear">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 1.57 0"/>
+    <axis xyz="0 0 0.025"/>
+    <geometry>
+      <cylinder length="${horizontal_length}" radius="${radius}"/>
+    </geometry>
+    <material name="r">
+      <color rgba="0.9 0 0 1.0"/>
+    </material>
+  </visual>
+
+  <collision>
+    <origin xyz="0 0 0" rpy="0 1.57 0"/>
+    <geometry>
+      <cylinder length="${horizontal_length}" radius="${radius}"/>
+    </geometry>
+  </collision>
+
+  <inertial>
+    <mass value="0.01"/>
+    <inertia ixx="0.000004" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.000004"/>
+  </inertial>
+</link>
+
+<!-- gazebo color -->
+<xacro:darkGreyColor linkName = "connection_part_2" />
+
+<!-- joint laserscanner front  -->
+<joint name="joint_front_laser" type="fixed">
+  <parent link="front_wagon"/>
+  <child link="front_laser_mount_link"/>
+  <origin xyz="${x_laser_front} 0 ${laser_height}" rpy="3.14 0 0"/>
+</joint>
+
+<!-- link laserscanner front -->
+<xacro:sick_tim_5xx name="front_laser" ros_topic="laser_scanner_front"/>
+
+<!-- distance box laserscanner front -->
+<link name="laser_front_box">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 0"/>
+    <geometry>
+      <box size="0.022 0.05 0.05"/> -->
+    </geometry>
+  </visual>
+
+  <inertial>
+    <mass value="0.1"/>
+    <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+  </inertial>
+</link>
+
+<!-- gazebo color scanner box -->
+<xacro:darkGreyColor linkName = "laser_front_box" />
+
+<!-- joint between laserscanner box and base link-->
+<joint name="j_laser_box" type="fixed">
+    <parent link="front_wagon"/>
+    <child link="laser_front_box"/>
+    <origin xyz="${length_wagon_front/2+0.011} 0 -0.005" rpy="0 0 0"/>
+</joint>
+
+<!-- joint rear laserscanner -->
+<joint name="j_rear_laser" type="fixed">
+  <parent link="rear_wagon"/>
+  <child link="rear_laser_mount_link"/>
+  <origin xyz="${x_laser_back} 0 ${laser_height}" rpy="3.14 0 3.14"/>
+</joint>
+
+<!-- rear laserscanner -->
+<xacro:sick_tim_5xx name="rear_laser" ros_topic="laser_scanner_rear"/>
+
+  <!-- <link name="laser">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.004" ixy="0.0" ixz="0.0" iyy="0.004" iyz="0.0" izz="0.02"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>  -->
+  
+  <link name="wheel_fl">
+    <visual>
+      <geometry>
+        <cylinder length="0.065" radius="0.15"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.065" radius="0.15"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="green"/>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+  
+  <link name="wheel_fr">
+    <visual>
+      <geometry>
+        <cylinder length="0.065" radius="0.15"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.065" radius="0.15"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="green"/>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+  
+  <link name="wheel_rl">
+    <visual>
+      <geometry>
+        <cylinder length="0.065" radius="0.15"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.065" radius="0.15"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="green"/>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+  
+  <link name="wheel_rr">
+    <visual>
+      <geometry>
+        <cylinder length="0.065" radius="0.15"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.065" radius="0.15"/>
+      </geometry>
+      <origin rpy="1.57075 0 0" xyz="0 0 0"/>
+      <material name="green"/>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.2"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </inertial>
+  </link>
+
+  <joint name="baselink_to_front_wagon" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_wagon"/>
+    <origin xyz="0 0 0.280"/>    
+  </joint>
+
+  <joint name="jointFront_2_jointRear" type="continuous">
+    <parent link="jointFront"/>
+    <child link="jointRear"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>    
+    <limit effort="1.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+  </joint>
+
+  <joint name="jointRear_2_rear_wagon" type="continuous">
+    <parent link="jointFront"/>
+    <child link="rear_wagon"/>
+    <origin xyz="-0.383 0 0"/>
+    <axis xyz="1 0 0"/>    
+    <limit effort="1.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+  </joint>
+
+  <joint name="joint_axisFront" type="fixed">
+    <parent link="front_wagon"/>
+    <child link="axesFront"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>    
+  </joint>
+
+  <joint name="joint_axisRear" type="fixed">
+    <parent link="rear_wagon"/>
+    <child link="axesRear"/>
+    <origin xyz="0 0 0"/>
+    <axis xyz="0 0 0"/>    
+  </joint>
+  
+  <joint name="front_axes_to_fl" type="continuous">
+    <parent link="axesFront"/>
+    <child link="wheel_fl"/>
+    <origin xyz="0 0.2325 -0.12"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  
+  <joint name="front_axes_to_fr" type="continuous">
+    <parent link="axesFront"/>
+    <child link="wheel_fr"/>
+    <origin xyz="0 -0.2325 -0.12"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="rear_axes_to_rl" type="continuous">
+    <parent link="axesRear"/>
+    <child link="wheel_rl"/>
+    <origin xyz="0 0.2325 -0.12"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  
+  <joint name="rear_axes_to_rr" type="continuous">
+    <parent link="axesRear"/>
+    <child link="wheel_rr"/>
+    <origin xyz="0 -0.2325 -0.12"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+<!-- joint between base link and first part of the articulated joint (body_angle) -->
+<joint name="body_angle" type="revolute">
+    <axis xyz="0 0 1"/>
+    <limit effort="1.0" lower="-1.57" upper="1.57" velocity="0.5"/>
+    <parent link="axesFront"/>
+    <child link="jointFront"/>
+    <origin xyz="${-wheel_joint_2_mid_joint} 0 -${joint_height}"/>
+</joint>
+
+<!-- transmisson for body angle -> this is required to present this joint in floribot/joint_states -->
+<transmission name="body_angle_trans">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="body_angle">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="body_angle_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+  <transmission name="mid_pendel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="jointRear">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor_pendel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="transm_fl">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_axes_to_fl">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </joint>
+    <actuator name="drive_fl">
+    </actuator>
+  </transmission>
+
+  <transmission name="transm_fr">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_axes_to_fr">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </joint>
+    <actuator name="drive_fl">
+    </actuator>
+  </transmission>
+
+  <transmission name="transm_rl">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="rear_axes_to_rl">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </joint>
+    <actuator name="drive_rl">
+    </actuator>
+  </transmission>
+
+  <transmission name="transm_rr">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="rear_axes_to_rr">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </joint>
+    <actuator name="drive_rr">
+    </actuator>
+  </transmission>
+
+  <gazebo>
+    <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control"> </plugin> 
+  </gazebo>
+
+  <gazebo reference="laser">
+    <sensor type="ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.570796</min_angle>
+            <max_angle>1.570796</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+               achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+               stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+               reading. -->
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>/laser/scan</topicName>
+        <frameName>laser</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+</robot>

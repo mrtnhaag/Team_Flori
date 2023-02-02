@@ -1,0 +1,14 @@
+
+gmapping starten:
+rosrun gmapping slam_gmapping scan:=/laser_scanner_front
+
+karte speichern:
+rosrun map_server map_saver -f testmap
+
+ssh stuff:
+ssh user@192.168.0.42
+password
+SSID: Floribot 4.0
+WLAN Passwort: floribot
+export ROS_MASTER_URI=http://192.168.0.42:11311
+
