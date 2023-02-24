@@ -8,7 +8,8 @@
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
   <!-- <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_final.urdf.xacro"/> -->
-  <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_reduced.urdf.xacro"/>
+  <!-- <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_reduced.urdf.xacro"/> -->
+  <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_mid_baselink.urdf.xacro"/>
   <!-- <arg name="model" default="$(find floribot_simulation)/urdf/primitiv.urdf.xacro"/> -->
   <arg name="rvizconfig" default="$(find floribot_simulation)/rviz/mit_laser.rviz" />
   <!-- <arg name="rvizconfig" default="$(find floribot_simulation)/rviz/urdf.rviz" /> -->
@@ -94,21 +95,24 @@
     <arg name= "amcl_scan_topic" value="/laser_scanner_front" />
 
 
-  <!-- <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-  < <arg name="base_global_planner" default="navfn/NavfnROS"/> >
-    < <arg name="base_global_planner" default="rrt_star_global_planner/RRTStarPlanner"/> >
-    <param name="base_global_planner" value="rrt_star_global_planner/RRTStarPlanner" />
-		< <param name="base_global_planner" value="global_planner/GlobalPlanner" /> >
-		<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <!-- <arg name="base_global_planner" default="navfn/NavfnROS"/>
+    <arg name="base_global_planner" default="rrt_star_global_planner/RRTStarPlanner"/>
+    <param name="base_global_planner" value="rrt_star_global_planner/RRTStarPlanner" /> -->
+		<param name="base_global_planner" value="global_planner/GlobalPlanner" /> 
+		<!-- <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" /> -->
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
 
 		<rosparam file="$(find floribot_simulation)/param/common_costmap_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find floribot_simulation)/param/common_costmap_params.yaml" command="load" ns="local_costmap" /> 
 		<rosparam file="$(find floribot_simulation)/param/local_costmap_params.yaml" command="load" />
 		<rosparam file="$(find floribot_simulation)/param/global_costmap_params.yaml" command="load" />	
 		<rosparam file="$(find floribot_simulation)/param/move_base_params.yaml" command="load" />
-		< <rosparam file="$(find floribot_simulation)/param/local_dwa_local_planner_params.yaml" command="load" />
-		<rosparam file="$(find floribot_simulation)/param/global_global_planner_params.yaml" command="load" /> >
-	</node> -->
+		<rosparam file="$(find floribot_simulation)/param/local_dwa_local_planner_params.yaml" command="load" />
+		<rosparam file="$(find floribot_simulation)/param/global_global_planner_params.yaml" command="load" /> 
+	</node>
+
+  <rosparam file="$(find floribot_simulation)/config/teb_local_params.yaml" command="load"/> 
 
   <!-- <node name="drive_pub" pkg="floribot_simulation" type="drive_pub.py"/> -->
 
