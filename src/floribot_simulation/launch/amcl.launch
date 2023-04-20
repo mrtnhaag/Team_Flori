@@ -1,7 +1,7 @@
 <launch>
 	<master auto="start"/>
-	<!-- <arg name="amcl_scan_topic" value="/sensors/scanMulti"/> -->
-	<arg name="amcl_scan_topic" value="/laser_scanner_front"/>
+	<arg name="amcl_scan_topic" value="/laser_merged"/>
+	<!-- <arg name="amcl_scan_topic" value="/laser_scanner_front"/> -->
 	<!--- Run AMCL -->
 	<node pkg="amcl" type="amcl" name="amcl" output="screen">
 		<remap from="/scan" to="$(arg amcl_scan_topic)"/>	

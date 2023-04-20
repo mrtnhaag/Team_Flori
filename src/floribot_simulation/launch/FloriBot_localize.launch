@@ -8,8 +8,8 @@
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
   <!-- <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_final.urdf.xacro"/> -->
-  <!-- <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_reduced.urdf.xacro"/> -->
-  <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_mid_baselink.urdf.xacro"/>
+  <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_reduced.urdf.xacro"/>
+  <!-- <arg name="model" default="$(find floribot_simulation)/urdf/Floribot_mid_baselink.urdf.xacro"/> -->
   <!-- <arg name="model" default="$(find floribot_simulation)/urdf/primitiv.urdf.xacro"/> -->
   <arg name="rvizconfig" default="$(find floribot_simulation)/rviz/mit_laser.rviz" />
   <!-- <arg name="rvizconfig" default="$(find floribot_simulation)/rviz/urdf.rviz" /> -->
@@ -67,7 +67,7 @@
   </include>
 
 <!-- Laser merge  -->
-  <!-- <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger">
+  <node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger">
     <param name="destination_frame" value="front_laser"/>
     <param name="scan_destination_topic" value="/laser_merged"/>
     <param name="laserscan_topics" value ="/laser_scanner_front /laser_scanner_rear" />
@@ -80,7 +80,7 @@
     <param name="scan_time" value="0.1"/> 
     <param name="range_min" value="0.05"/>
     <param name="range_max" value="25.0"/>
-  </node> -->
+  </node>
 
 <!-- map server -->
 
