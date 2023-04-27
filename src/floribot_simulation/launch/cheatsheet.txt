@@ -12,3 +12,5 @@ SSID: Floribot 4.0
 WLAN Passwort: floribot
 export ROS_MASTER_URI=http://192.168.0.42:11311
 
+rosrun virtual_maize_field generate_world.py fre22_task_navigation_mini
+
