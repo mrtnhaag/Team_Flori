@@ -10,7 +10,7 @@ from tf.transformations import quaternion_from_euler
 
 def publish_obstacle_msg():
   pub = rospy.Publisher('/test_optim_node/obstacles', ObstacleArrayMsg, queue_size=1)
-  #pub = rospy.Publisher('/p3dx/move_base/TebLocalPlannerROS/obstacles', ObstacleArrayMsg, queue_size=1)
+  #pub = rospy.Publisher('/p3dx/move_base/TebExtPlannerROS/obstacles', ObstacleArrayMsg, queue_size=1)
   rospy.init_node("test_obstacle_msg")
 
   y_0 = -3.0

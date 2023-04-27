@@ -36,7 +36,7 @@
  * Author: Christoph Rösmann
  *********************************************************************/
 
-#include <teb_local_planner/teb_local_planner_ros.h>
+#include <teb_ext_planner/teb_ext_planner_ros.h>
 
 #include <interactive_markers/interactive_marker_server.h>
 #include <visualization_msgs/Marker.h>
@@ -45,7 +45,7 @@
 #include <boost/make_shared.hpp>
 
 
-using namespace teb_local_planner; // it is ok here to import everything for testing purposes
+using namespace teb_ext_planner; // it is ok here to import everything for testing purposes
 
 // ============= Global Variables ================
 // Ok global variables are bad, but here we only have a simple testing node.
@@ -54,7 +54,7 @@ TebVisualizationPtr visual;
 std::vector<ObstaclePtr> obst_vector;
 ViaPointContainer via_points;
 TebConfig config;
-boost::shared_ptr< dynamic_reconfigure::Server<TebLocalPlannerReconfigureConfig> > dynamic_recfg;
+boost::shared_ptr< dynamic_reconfigure::Server<TebExtPlannerReconfigureConfig> > dynamic_recfg;
 ros::Subscriber custom_obst_sub;
 ros::Subscriber via_points_sub;
 ros::Subscriber clicked_points_sub;
@@ -64,7 +64,7 @@ unsigned int no_fixed_obstacles;
 // =========== Function declarations =============
 void CB_mainCycle(const ros::TimerEvent& e);
 void CB_publishCycle(const ros::TimerEvent& e);
-void CB_reconfigure(TebLocalPlannerReconfigureConfig& reconfig, uint32_t level);
+void CB_reconfigure(TebExtPlannerReconfigureConfig& reconfig, uint32_t level);
 void CB_customObstacle(const costmap_converter::ObstacleArrayMsg::ConstPtr& obst_msg);
 void CreateInteractiveMarker(const double& init_x, const double& init_y, unsigned int id, std::string frame, interactive_markers::InteractiveMarkerServer* marker_server, interactive_markers::InteractiveMarkerServer::FeedbackCallback feedback_cb);
 void CB_obstacle_marker(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback);
@@ -87,8 +87,8 @@ int main( int argc, char** argv )
   ros::Timer publish_timer = n.createTimer(ros::Duration(0.1), CB_publishCycle);
   
   // setup dynamic reconfigure
-  dynamic_recfg = boost::make_shared< dynamic_reconfigure::Server<TebLocalPlannerReconfigureConfig> >(n);
-  dynamic_reconfigure::Server<TebLocalPlannerReconfigureConfig>::CallbackType cb = boost::bind(CB_reconfigure, _1, _2);
+  dynamic_recfg = boost::make_shared< dynamic_reconfigure::Server<TebExtPlannerReconfigureConfig> >(n);
+  dynamic_reconfigure::Server<TebExtPlannerReconfigureConfig>::CallbackType cb = boost::bind(CB_reconfigure, _1, _2);
   dynamic_recfg->setCallback(cb);
   
   // setup callback for custom obstacles
@@ -147,7 +147,7 @@ int main( int argc, char** argv )
   visual = TebVisualizationPtr(new TebVisualization(n, config));
   
   // Setup robot shape model
-  RobotFootprintModelPtr robot_model = TebLocalPlannerROS::getRobotFootprintFromParamServer(n, config);
+  RobotFootprintModelPtr robot_model = TebExtPlannerROS::getRobotFootprintFromParamServer(n, config);
   
   // Setup planner (homotopy class planning or just the local teb planner)
   if (config.hcp.enable_homotopy_class_planning)
@@ -176,7 +176,7 @@ void CB_publishCycle(const ros::TimerEvent& e)
   visual->publishViaPoints(via_points);
 }
 
-void CB_reconfigure(TebLocalPlannerReconfigureConfig& reconfig, uint32_t level)
+void CB_reconfigure(TebExtPlannerReconfigureConfig& reconfig, uint32_t level)
 {
   config.reconfigure(reconfig);
 }

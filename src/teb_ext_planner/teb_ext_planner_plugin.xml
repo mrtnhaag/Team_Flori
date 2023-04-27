@@ -1,11 +1,11 @@
-<library path="/home/martin/Documents/Master/Thesis/Team_Flori/devel/lib/libteb_local_planner">
-	<class name="teb_ext_planner/TebExtPlannerROS" type="teb_local_planner::TebLocalPlannerROS" base_class_type="nav_core::BaseLocalPlanner">
+<library path="/home/martin/Documents/Master/Thesis/Team_Flori/devel/lib/libteb_ext_planner">
+	<class name="teb_ext_planner/TebExtPlannerROS" type="teb_ext_planner::TebExtPlannerROS" base_class_type="nav_core::BaseLocalPlanner">
 		<description>
-			The teb_local_planner package implements a plugin
+			The teb_ext_planner package implements a plugin
 			to the base_local_planner of the 2D navigation stack.
 		</description>
 	</class>
-	<class name="teb_ext_planner/TebExtPlannerROS" type="teb_local_planner::TebLocalPlannerROS" base_class_type="mbf_costmap_core::CostmapController">
+	<class name="teb_ext_planner/TebExtPlannerROS" type="teb_ext_planner::TebExtPlannerROS" base_class_type="mbf_costmap_core::CostmapController">
 		<description>
 			Same plugin implemented MBF CostmapController's extended interface.
 		</description>

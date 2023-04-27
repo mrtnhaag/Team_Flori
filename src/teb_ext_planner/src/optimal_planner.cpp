@@ -36,25 +36,25 @@
  * Author: Christoph Rösmann
  *********************************************************************/
 
-#include <teb_local_planner/optimal_planner.h>
+#include <teb_ext_planner/optimal_planner.h>
 
 // g2o custom edges and vertices for the TEB planner
-#include <teb_local_planner/g2o_types/edge_velocity.h>
-#include <teb_local_planner/g2o_types/edge_velocity_obstacle_ratio.h>
-#include <teb_local_planner/g2o_types/edge_acceleration.h>
-#include <teb_local_planner/g2o_types/edge_kinematics.h>
-#include <teb_local_planner/g2o_types/edge_time_optimal.h>
-#include <teb_local_planner/g2o_types/edge_shortest_path.h>
-#include <teb_local_planner/g2o_types/edge_obstacle.h>
-#include <teb_local_planner/g2o_types/edge_dynamic_obstacle.h>
-#include <teb_local_planner/g2o_types/edge_via_point.h>
-#include <teb_local_planner/g2o_types/edge_prefer_rotdir.h>
+#include <teb_ext_planner/g2o_types/edge_velocity.h>
+#include <teb_ext_planner/g2o_types/edge_velocity_obstacle_ratio.h>
+#include <teb_ext_planner/g2o_types/edge_acceleration.h>
+#include <teb_ext_planner/g2o_types/edge_kinematics.h>
+#include <teb_ext_planner/g2o_types/edge_time_optimal.h>
+#include <teb_ext_planner/g2o_types/edge_shortest_path.h>
+#include <teb_ext_planner/g2o_types/edge_obstacle.h>
+#include <teb_ext_planner/g2o_types/edge_dynamic_obstacle.h>
+#include <teb_ext_planner/g2o_types/edge_via_point.h>
+#include <teb_ext_planner/g2o_types/edge_prefer_rotdir.h>
 
 #include <memory>
 #include <limits>
 
 
-namespace teb_local_planner
+namespace teb_ext_planner
 {
 
 // ============== Implementation ===================
@@ -1313,4 +1313,4 @@ bool TebOptimalPlanner::isTrajectoryFeasible(base_local_planner::CostmapModel* c
   return true;
 }
 
-} // namespace teb_local_planner
+} // namespace teb_ext_planner

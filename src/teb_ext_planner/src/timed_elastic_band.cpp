@@ -36,11 +36,11 @@
  * Author: Christoph Rösmann
  *********************************************************************/
 
-#include <teb_local_planner/timed_elastic_band.h>
+#include <teb_ext_planner/timed_elastic_band.h>
 
 #include <limits>
 
-namespace teb_local_planner
+namespace teb_ext_planner
 {
 
 namespace
@@ -262,7 +262,7 @@ void TimedElasticBand::autoResize(double dt_ref, double dt_hysteresis, int min_s
       }
       else if(TimeDiff(i) < dt_ref - dt_hysteresis && sizeTimeDiffs()>min_samples) // only remove samples if size is larger than min_samples.
       {
-        //ROS_DEBUG("teb_local_planner: autoResize() deleting bandpoint i=%u, #TimeDiffs=%lu",i,sizeTimeDiffs());
+        //ROS_DEBUG("teb_ext_planner: autoResize() deleting bandpoint i=%u, #TimeDiffs=%lu",i,sizeTimeDiffs());
 
         if(i < ((int)sizeTimeDiffs()-1))
         {
@@ -631,4 +631,4 @@ bool TimedElasticBand::isTrajectoryInsideRegion(double radius, double max_dist_b
 
 
 
-} // namespace teb_local_planner
+} // namespace teb_ext_planner

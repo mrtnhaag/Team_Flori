@@ -36,11 +36,11 @@
  * Author: Christoph Rösmann
  *********************************************************************/
 
-#include <teb_local_planner/visualization.h>
-#include <teb_local_planner/optimal_planner.h>
-#include <teb_local_planner/FeedbackMsg.h>
+#include <teb_ext_planner/visualization.h>
+#include <teb_ext_planner/optimal_planner.h>
+#include <teb_ext_planner/FeedbackMsg.h>
 
-namespace teb_local_planner
+namespace teb_ext_planner
 {
 
 TebVisualization::TebVisualization() : initialized_(false)
@@ -65,7 +65,7 @@ void TebVisualization::initialize(ros::NodeHandle& nh, const TebConfig& cfg)
   local_plan_pub_ = nh.advertise<nav_msgs::Path>("local_plan",1);
   teb_poses_pub_ = nh.advertise<geometry_msgs::PoseArray>("teb_poses", 100);
   teb_marker_pub_ = nh.advertise<visualization_msgs::Marker>("teb_markers", 1000);
-  feedback_pub_ = nh.advertise<teb_local_planner::FeedbackMsg>("teb_feedback", 10);  
+  feedback_pub_ = nh.advertise<teb_ext_planner::FeedbackMsg>("teb_feedback", 10);  
   
   initialized_ = true; 
 }
@@ -537,4 +537,4 @@ bool TebVisualization::printErrorWhenNotInitialized() const
   return false;
 }
 
-} // namespace teb_local_planner
+} // namespace teb_ext_planner

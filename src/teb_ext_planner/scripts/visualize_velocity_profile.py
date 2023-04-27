@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-# This small script subscribes to the FeedbackMsg message of teb_local_planner
+# This small script subscribes to the FeedbackMsg message of teb_ext_planner
 # and plots the current velocity.
 # publish_feedback must be turned on such that the planner publishes this information.
 # Author: christoph.roesmann@tu-dortmund.de
 
 import rospy, math
-from teb_local_planner.msg import FeedbackMsg, TrajectoryMsg, TrajectoryPointMsg
+from teb_ext_planner.msg import FeedbackMsg, TrajectoryMsg, TrajectoryPointMsg
 from geometry_msgs.msg import PolygonStamped, Point32
 import numpy as np
 import matplotlib.pyplot as plotter
@@ -43,7 +43,7 @@ def velocity_plotter():
   rospy.Subscriber(topic_name, FeedbackMsg, feedback_callback, queue_size = 1) # define feedback topic here!
 
   rospy.loginfo("Visualizing velocity profile published on '%s'.",topic_name) 
-  rospy.loginfo("Make sure to enable rosparam 'publish_feedback' in the teb_local_planner.")
+  rospy.loginfo("Make sure to enable rosparam 'publish_feedback' in the teb_ext_planner.")
 
   # two subplots sharing the same t axis
   fig, (ax_v, ax_omega) = plotter.subplots(2, sharex=True)

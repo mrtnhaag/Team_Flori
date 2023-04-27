@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-# This small script subscribes to the FeedbackMsg message of teb_local_planner
+# This small script subscribes to the FeedbackMsg message of teb_ext_planner
 # and exports data to a mat file.
 # publish_feedback must be turned on such that the planner publishes this information.
 # Author: christoph.roesmann@tu-dortmund.de
 
 import rospy, math
-from teb_local_planner.msg import FeedbackMsg, TrajectoryMsg, TrajectoryPointMsg
+from teb_ext_planner.msg import FeedbackMsg, TrajectoryMsg, TrajectoryPointMsg
 from geometry_msgs.msg import PolygonStamped, Point32, Quaternion
 from tf.transformations import euler_from_quaternion
 import numpy as np

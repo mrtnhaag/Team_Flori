@@ -51,7 +51,7 @@ if __name__ == '__main__':
     ackermann_cmd_topic = rospy.get_param('~ackermann_cmd_topic', '/ackermann_cmd')
     wheelbase = rospy.get_param('~wheelbase', 1.0)
     frame_id = rospy.get_param('~frame_id', 'odom')
-    cmd_angle_instead_rotvel = rospy.get_param('/move_base/TebLocalPlannerROS/cmd_angle_instead_rotvel', False)
+    cmd_angle_instead_rotvel = rospy.get_param('/move_base/TebExtPlannerROS/cmd_angle_instead_rotvel', False)
     
     rospy.Subscriber(twist_cmd_topic, Twist, cmd_callback, queue_size=1)
     pub = rospy.Publisher(ackermann_cmd_topic, AckermannDriveStamped, queue_size=1)

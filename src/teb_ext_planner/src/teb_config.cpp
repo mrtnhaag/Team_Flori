@@ -36,9 +36,9 @@
  * Author: Christoph Rösmann
  *********************************************************************/
 
-#include <teb_local_planner/teb_config.h>
+#include <teb_ext_planner/teb_config.h>
 
-namespace teb_local_planner
+namespace teb_ext_planner
 {
     
 void TebConfig::loadRosParamFromNodeHandle(const ros::NodeHandle& nh)
@@ -182,7 +182,7 @@ void TebConfig::loadRosParamFromNodeHandle(const ros::NodeHandle& nh)
   checkDeprecated(nh);
 }
 
-void TebConfig::reconfigure(TebLocalPlannerReconfigureConfig& cfg)
+void TebConfig::reconfigure(TebExtPlannerReconfigureConfig& cfg)
 { 
   boost::mutex::scoped_lock l(config_mutex_);
   
@@ -308,66 +308,66 @@ void TebConfig::checkParameters() const
 {
   // positive backward velocity?
   if (robot.max_vel_x_backwards <= 0)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: Do not choose max_vel_x_backwards to be <=0. Disable backwards driving by increasing the optimization weight for penalyzing backwards driving.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: Do not choose max_vel_x_backwards to be <=0. Disable backwards driving by increasing the optimization weight for penalyzing backwards driving.");
   
   // bounds smaller than penalty epsilon
   if (robot.max_vel_x <= optim.penalty_epsilon)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: max_vel_x <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
+    ROS_WARN("TebExtPlannerROS() Param Warning: max_vel_x <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
   
   if (robot.max_vel_x_backwards <= optim.penalty_epsilon)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: max_vel_x_backwards <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
+    ROS_WARN("TebExtPlannerROS() Param Warning: max_vel_x_backwards <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
   
   if (robot.max_vel_theta <= optim.penalty_epsilon)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: max_vel_theta <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
+    ROS_WARN("TebExtPlannerROS() Param Warning: max_vel_theta <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
   
   if (robot.acc_lim_x <= optim.penalty_epsilon)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: acc_lim_x <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
+    ROS_WARN("TebExtPlannerROS() Param Warning: acc_lim_x <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
   
   if (robot.acc_lim_theta <= optim.penalty_epsilon)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: acc_lim_theta <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
+    ROS_WARN("TebExtPlannerROS() Param Warning: acc_lim_theta <= penalty_epsilon. The resulting bound is negative. Undefined behavior... Change at least one of them!");
       
   // dt_ref and dt_hyst
   if (trajectory.dt_ref <= trajectory.dt_hysteresis)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: dt_ref <= dt_hysteresis. The hysteresis is not allowed to be greater or equal!. Undefined behavior... Change at least one of them!");
+    ROS_WARN("TebExtPlannerROS() Param Warning: dt_ref <= dt_hysteresis. The hysteresis is not allowed to be greater or equal!. Undefined behavior... Change at least one of them!");
     
   // min number of samples
   if (trajectory.min_samples <3)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: parameter min_samples is smaller than 3! Sorry, I haven't enough degrees of freedom to plan a trajectory for you. Please increase ...");
+    ROS_WARN("TebExtPlannerROS() Param Warning: parameter min_samples is smaller than 3! Sorry, I haven't enough degrees of freedom to plan a trajectory for you. Please increase ...");
   
   // costmap obstacle behind robot
   if (obstacles.costmap_obstacles_behind_robot_dist < 0)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: parameter 'costmap_obstacles_behind_robot_dist' should be positive or zero.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: parameter 'costmap_obstacles_behind_robot_dist' should be positive or zero.");
     
   // hcp: obstacle heading threshold
   if (hcp.obstacle_keypoint_offset>=1 || hcp.obstacle_keypoint_offset<=0)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: parameter obstacle_heading_threshold must be in the interval ]0,1[. 0=0deg opening angle, 1=90deg opening angle.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: parameter obstacle_heading_threshold must be in the interval ]0,1[. 0=0deg opening angle, 1=90deg opening angle.");
   
   // carlike
   if (robot.cmd_angle_instead_rotvel && robot.wheelbase==0)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: parameter cmd_angle_instead_rotvel is non-zero but wheelbase is set to zero: undesired behavior.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: parameter cmd_angle_instead_rotvel is non-zero but wheelbase is set to zero: undesired behavior.");
   
   if (robot.cmd_angle_instead_rotvel && robot.min_turning_radius==0)
-    ROS_WARN("TebLocalPlannerROS() Param Warning: parameter cmd_angle_instead_rotvel is non-zero but min_turning_radius is set to zero: undesired behavior. You are mixing a carlike and a diffdrive robot");
+    ROS_WARN("TebExtPlannerROS() Param Warning: parameter cmd_angle_instead_rotvel is non-zero but min_turning_radius is set to zero: undesired behavior. You are mixing a carlike and a diffdrive robot");
   
   // positive weight_adapt_factor
   if (optim.weight_adapt_factor < 1.0)
-      ROS_WARN("TebLocalPlannerROS() Param Warning: parameter weight_adapt_factor shoud be >= 1.0");
+      ROS_WARN("TebExtPlannerROS() Param Warning: parameter weight_adapt_factor shoud be >= 1.0");
   
   if (recovery.oscillation_filter_duration < 0)
-      ROS_WARN("TebLocalPlannerROS() Param Warning: parameter oscillation_filter_duration must be >= 0");
+      ROS_WARN("TebExtPlannerROS() Param Warning: parameter oscillation_filter_duration must be >= 0");
 
   // weights
   if (optim.weight_optimaltime <= 0)
-      ROS_WARN("TebLocalPlannerROS() Param Warning: parameter weight_optimaltime shoud be > 0 (even if weight_shortest_path is in use)");
+      ROS_WARN("TebExtPlannerROS() Param Warning: parameter weight_optimaltime shoud be > 0 (even if weight_shortest_path is in use)");
 
   // holonomic check
   if (robot.max_vel_y > 0) {
     if (robot.max_vel_trans < std::min(robot.max_vel_x, robot.max_vel_trans)) {
-      ROS_WARN("TebLocalPlannerROS() Param Warning: max_vel_trans < min(max_vel_x, max_vel_y). Note that vel_trans = sqrt(Vx^2 + Vy^2), thus max_vel_trans will limit Vx and Vy in the optimization step.");
+      ROS_WARN("TebExtPlannerROS() Param Warning: max_vel_trans < min(max_vel_x, max_vel_y). Note that vel_trans = sqrt(Vx^2 + Vy^2), thus max_vel_trans will limit Vx and Vy in the optimization step.");
     }
     
     if (robot.max_vel_trans > std::max(robot.max_vel_x, robot.max_vel_y)) {
-      ROS_WARN("TebLocalPlannerROS() Param Warning: max_vel_trans > max(max_vel_x, max_vel_y). Robot will rotate and move diagonally to achieve max resultant vel (possibly max vel on both axis), limited by the max_vel_trans.");
+      ROS_WARN("TebExtPlannerROS() Param Warning: max_vel_trans > max(max_vel_x, max_vel_y). Robot will rotate and move diagonally to achieve max resultant vel (possibly max vel on both axis), limited by the max_vel_trans.");
     }
   }
   
@@ -376,22 +376,22 @@ void TebConfig::checkParameters() const
 void TebConfig::checkDeprecated(const ros::NodeHandle& nh) const
 {
   if (nh.hasParam("line_obstacle_poses_affected") || nh.hasParam("polygon_obstacle_poses_affected"))
-    ROS_WARN("TebLocalPlannerROS() Param Warning: 'line_obstacle_poses_affected' and 'polygon_obstacle_poses_affected' are deprecated. They share now the common parameter 'obstacle_poses_affected'.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: 'line_obstacle_poses_affected' and 'polygon_obstacle_poses_affected' are deprecated. They share now the common parameter 'obstacle_poses_affected'.");
   
   if (nh.hasParam("weight_point_obstacle") || nh.hasParam("weight_line_obstacle") || nh.hasParam("weight_poly_obstacle"))
-    ROS_WARN("TebLocalPlannerROS() Param Warning: 'weight_point_obstacle', 'weight_line_obstacle' and 'weight_poly_obstacle' are deprecated. They are replaced by the single param 'weight_obstacle'.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: 'weight_point_obstacle', 'weight_line_obstacle' and 'weight_poly_obstacle' are deprecated. They are replaced by the single param 'weight_obstacle'.");
   
   if (nh.hasParam("costmap_obstacles_front_only"))
-    ROS_WARN("TebLocalPlannerROS() Param Warning: 'costmap_obstacles_front_only' is deprecated. It is replaced by 'costmap_obstacles_behind_robot_dist' to define the actual area taken into account.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: 'costmap_obstacles_front_only' is deprecated. It is replaced by 'costmap_obstacles_behind_robot_dist' to define the actual area taken into account.");
   
   if (nh.hasParam("costmap_emergency_stop_dist"))
-    ROS_WARN("TebLocalPlannerROS() Param Warning: 'costmap_emergency_stop_dist' is deprecated. You can safely remove it from your parameter config.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: 'costmap_emergency_stop_dist' is deprecated. You can safely remove it from your parameter config.");
   
   if (nh.hasParam("alternative_time_cost"))
-    ROS_WARN("TebLocalPlannerROS() Param Warning: 'alternative_time_cost' is deprecated. It has been replaced by 'selection_alternative_time_cost'.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: 'alternative_time_cost' is deprecated. It has been replaced by 'selection_alternative_time_cost'.");
 
   if (nh.hasParam("global_plan_via_point_sep"))
-    ROS_WARN("TebLocalPlannerROS() Param Warning: 'global_plan_via_point_sep' is deprecated. It has been replaced by 'global_plan_viapoint_sep' due to consistency reasons.");
+    ROS_WARN("TebExtPlannerROS() Param Warning: 'global_plan_via_point_sep' is deprecated. It has been replaced by 'global_plan_viapoint_sep' due to consistency reasons.");
 }
     
-} // namespace teb_local_planner
+} // namespace teb_ext_planner

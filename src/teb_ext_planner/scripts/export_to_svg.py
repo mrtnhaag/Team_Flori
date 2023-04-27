@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 ========================================================================================
-# This small script subscribes to the FeedbackMsg message of teb_local_planner
+# This small script subscribes to the FeedbackMsg message of teb_ext_planner
 # and converts the current scene to a svg-image
 # publish_feedback must be turned on such that the planner publishes this information.
 # Author: christoph.roesmann@tu-dortmund.de
@@ -21,7 +21,7 @@ import sys
 import time
 import random
 from svgwrite import cm, mm
-from teb_local_planner.msg import FeedbackMsg, TrajectoryMsg, TrajectoryPointMsg
+from teb_ext_planner.msg import FeedbackMsg, TrajectoryMsg, TrajectoryPointMsg
 from geometry_msgs.msg import PolygonStamped, Point32, Quaternion
 
 
@@ -87,7 +87,7 @@ def feedback_callback(data):
     @type  data: visualization_msgs/Marker
 
     @globalparam tebList: Received TEB List
-    @globaltype  tebList: teb_local_planner/FeedbackMsg
+    @globaltype  tebList: teb_ext_planner/FeedbackMsg
     """
     # TODO: Remove global variables
     global feedbackMsg
