@@ -106,20 +106,9 @@ int main( int argc, char** argv )
   obst_vector.push_back( boost::make_shared<PointObstacle>(-3,1) );
   obst_vector.push_back( boost::make_shared<PointObstacle>(6,2) );
   obst_vector.push_back( boost::make_shared<PointObstacle>(0,0.1) );
- //obst_vector.push_back( boost::make_shared<LineObstacle>(1,1.5,1,-1.5) ); //90 deg oben unten
- //obst_vector.push_back( boost::make_shared<LineObstacle>(1,0,-2,0) ); //180 deg links rechts
- obst_vector.push_back( boost::make_shared<LineObstacle>(0,0,1,0) ); //180 deg links rechts
- obst_vector.push_back( boost::make_shared<LineObstacle>(-1,-2,0,-2) ); //180 deg links rechts
-  obst_vector.push_back( boost::make_shared<LineObstacle>(1,-2,2,-2) ); //180 deg links rechts
-
-  obst_vector.push_back( boost::make_shared<LineObstacle>(0,0,0,-2) ); //90 deg oben unten
-  obst_vector.push_back( boost::make_shared<LineObstacle>(1,0,1,-2) ); //90 deg oben unten
-  obst_vector.push_back( boost::make_shared<LineObstacle>(-1,-2,-1,-3.5) ); //90 deg oben unten
-  obst_vector.push_back( boost::make_shared<LineObstacle>(-1,-4.5,-1,-10) ); //90 deg oben unten
-  obst_vector.push_back( boost::make_shared<LineObstacle>(2,-2,2,-3.5) ); //90 deg oben unten
-  obst_vector.push_back( boost::make_shared<LineObstacle>(2,-4.5,2,-10) ); //90 deg oben unten
-  obst_vector.push_back( boost::make_shared<LineObstacle>(0.5,0,0.5,10) ); //90 deg oben unten
-  obst_vector.push_back( boost::make_shared<LineObstacle>(0.5,-3,0.5,-20) ); //90 deg oben unten
+//  obst_vector.push_back( boost::make_shared<LineObstacle>(1,1.5,1,-1.5) ); //90 deg
+//  obst_vector.push_back( boost::make_shared<LineObstacle>(1,0,-1,0) ); //180 deg
+//  obst_vector.push_back( boost::make_shared<PointObstacle>(-1.5,-0.5) );
 
   // Dynamic obstacles
   Eigen::Vector2d vel (0.1, -0.3);
@@ -176,9 +165,7 @@ int main( int argc, char** argv )
 // Planning loop
 void CB_mainCycle(const ros::TimerEvent& e)
 {
-  planner->plan(PoseSE2(-4,-3,0), PoseSE2(4,-3,0)); // hardcoded start and goal for testing purposes
-    ROS_INFO("test_oiptim z180");
-
+  planner->plan(PoseSE2(-4,0,0), PoseSE2(4,0,0)); // hardcoded start and goal for testing purposes
 }
 
 // Visualization loop

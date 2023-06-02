@@ -324,6 +324,8 @@ double TimedElasticBand::getAccumulatedDistance() const
 
 bool TimedElasticBand::initTrajectoryToGoal(const PoseSE2& start, const PoseSE2& goal, double diststep, double max_vel_x, int min_samples, bool guess_backwards_motion)
 {
+  ROS_INFO("initTrajectoryToGoal z391");
+
   if (!isInit())
   {   
     addPose(start); // add starting point
@@ -388,7 +390,7 @@ bool TimedElasticBand::initTrajectoryToGoal(const PoseSE2& start, const PoseSE2&
 
 bool TimedElasticBand::initTrajectoryToGoal(const std::vector<geometry_msgs::PoseStamped>& plan, double max_vel_x, double max_vel_theta, bool estimate_orient, int min_samples, bool guess_backwards_motion)
 {
-  
+  ROS_INFO("initTrajectoryToGoal z391");
   if (!isInit())
   {
     PoseSE2 start(plan.front().pose);
@@ -556,6 +558,7 @@ void TimedElasticBand::updateAndPruneTEB(boost::optional<const PoseSE2&> new_sta
 {
   // first and simple approach: change only start confs (and virtual start conf for inital velocity)
   // TEST if optimizer can handle this "hard" placement
+    ROS_INFO("timed_elastic_band z555- prune");
 
   if (new_start && sizePoses()>0)
   {    

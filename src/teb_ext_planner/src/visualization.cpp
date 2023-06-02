@@ -42,6 +42,15 @@
 
 namespace teb_ext_planner
 {
+  double theta_old = 0;
+  double theta_diff = 0;
+  double y_old = 0;
+  double y_diff = 0;
+  double x_old = 0;
+  double x_diff = 0;
+  double winkel_old = 0;
+  double winkel_diff = 0;
+  int posesize = 0;
 
 TebVisualization::TebVisualization() : initialized_(false)
 {
@@ -101,17 +110,73 @@ void TebVisualization::publishLocalPlanAndPoses(const TimedElasticBand& teb) con
     teb_poses.header.stamp = teb_path.header.stamp;
     
     // fill path msgs with teb configurations
+    //if (teb.sizePoses()>posesize){
+    if (true){
+      posesize = teb.sizePoses();
+          ROS_INFO("teb.suize: %i", teb.sizePoses());
+    ROS_INFO("tabelle poses:x,y, theta,x_diff,y_diff winkel, winkel_diff");
     for (int i=0; i < teb.sizePoses(); i++)
     {
+      double x = teb.Pose(i).x();
+      double y = teb.Pose(i).y();
+
+
+      x_diff = x - x_old;
+      x_old = x;
+      y_diff = y - y_old;
+      y_old = y;
+      double winkel = std::atan2(y_diff,x_diff);
+
+      // if(winkel<0){
+      //   winkel += 2*M_PI;
+      // }
+      
+      winkel_diff = winkel - winkel_old;
+      winkel_old = winkel;
+
+      double theta = teb.Pose(i).theta();
+      theta_diff = std::abs(theta_old - theta);
+      theta_old = theta;
+
+      ROS_INFO(" %f %f %f %f %f %f %f ", x,y, theta,x_diff,y_diff, winkel, winkel_diff );
+    }
+    }
+    
+    for (int i=0; i < teb.sizePoses(); i++)
+    {
+      //ROS_INFO("teb.suize: %i", teb.sizePoses());
       geometry_msgs::PoseStamped pose;
       pose.header.frame_id = teb_path.header.frame_id;
       pose.header.stamp = teb_path.header.stamp;
       pose.pose.position.x = teb.Pose(i).x();
       pose.pose.position.y = teb.Pose(i).y();
+
       pose.pose.position.z = cfg_->hcp.visualize_with_time_as_z_axis_scale*teb.getSumOfTimeDiffsUpToIdx(i);
       pose.pose.orientation = tf::createQuaternionMsgFromYaw(teb.Pose(i).theta());
+      
+
       teb_path.poses.push_back(pose);
       teb_poses.poses.push_back(pose.pose);
+
+      double x = teb.Pose(i).x();
+      double y = teb.Pose(i).y();
+
+
+      x_diff = x - x_old;
+      x_old = x;
+      y_diff = y - y_old;
+      y_old = y;
+      double winkel = std::atan2(y,x);
+      winkel_diff = winkel - winkel_old;
+      winkel_old = winkel;
+
+      double theta = teb.Pose(i).theta();
+      theta_diff = std::abs(theta_old - theta);
+      theta_old = theta;
+
+      if (abs(winkel_diff)>0.5){
+      ROS_INFO(" richtungswechsel %f %f %f %f", x,y,theta,winkel_diff );
+      }
     }
     local_plan_pub_.publish(teb_path);
     teb_poses_pub_.publish(teb_poses);

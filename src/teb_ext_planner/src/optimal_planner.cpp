@@ -188,6 +188,7 @@ boost::shared_ptr<g2o::SparseOptimizer> TebOptimalPlanner::initOptimizer()
 bool TebOptimalPlanner::optimizeTEB(int iterations_innerloop, int iterations_outerloop, bool compute_cost_afterwards,
                                     double obst_cost_scale, double viapoint_cost_scale, bool alternative_time_cost)
 {
+  //ROS_INFO("optplanner z191-optimizeTEB");
   if (cfg_->optim.optimization_activate==false) 
     return false;
   
@@ -253,6 +254,8 @@ void TebOptimalPlanner::setVelocityGoal(const geometry_msgs::Twist& vel_goal)
 bool TebOptimalPlanner::plan(const std::vector<geometry_msgs::PoseStamped>& initial_plan, const geometry_msgs::Twist* start_vel, bool free_goal_vel)
 {    
   ROS_ASSERT_MSG(initialized_, "Call initialize() first.");
+  ROS_INFO("optplanner z257- plan");
+
   if (!teb_.isInit())
   {
     teb_.initTrajectoryToGoal(initial_plan, cfg_->robot.max_vel_x, cfg_->robot.max_vel_theta, cfg_->trajectory.global_plan_overwrite_orientation,
@@ -265,6 +268,7 @@ bool TebOptimalPlanner::plan(const std::vector<geometry_msgs::PoseStamped>& init
     if (teb_.sizePoses()>0
         && (goal_.position() - teb_.BackPose().position()).norm() < cfg_->trajectory.force_reinit_new_goal_dist
         && fabs(g2o::normalize_theta(goal_.theta() - teb_.BackPose().theta())) < cfg_->trajectory.force_reinit_new_goal_angular) // actual warm start!
+        
       teb_.updateAndPruneTEB(start_, goal_, cfg_->trajectory.min_samples); // update TEB
     else // goal too far away -> reinit
     {
@@ -272,6 +276,7 @@ bool TebOptimalPlanner::plan(const std::vector<geometry_msgs::PoseStamped>& init
       teb_.clearTimedElasticBand();
       teb_.initTrajectoryToGoal(initial_plan, cfg_->robot.max_vel_x, cfg_->robot.max_vel_theta, cfg_->trajectory.global_plan_overwrite_orientation,
         cfg_->trajectory.min_samples, cfg_->trajectory.allow_init_with_backwards_motion);
+
     }
   }
   if (start_vel)
@@ -373,6 +378,7 @@ bool TebOptimalPlanner::buildGraph(double weight_multiplier)
 
 bool TebOptimalPlanner::optimizeGraph(int no_iterations,bool clear_after)
 {
+  //ROS_INFO("optplanner z381-optimizegraph");
   if (cfg_->robot.max_vel_x<0.01)
   {
     ROS_WARN("optimizeGraph(): Robot Max Velocity is smaller than 0.01m/s. Optimizing aborted...");
