@@ -176,8 +176,9 @@ int main( int argc, char** argv )
 // Planning loop
 void CB_mainCycle(const ros::TimerEvent& e)
 {
+      ROS_INFO("test_oiptim z180");
+
   planner->plan(PoseSE2(-4,-3,0), PoseSE2(4,-3,0)); // hardcoded start and goal for testing purposes
-    ROS_INFO("test_oiptim z180");
 
 }
 

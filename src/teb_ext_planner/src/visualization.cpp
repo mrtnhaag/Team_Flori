@@ -50,7 +50,9 @@ namespace teb_ext_planner
   double x_diff = 0;
   double winkel_old = 0;
   double winkel_diff = 0;
+  int wendepunkt = -1;
   int posesize = 0;
+  int newpossite = 0;
 
 TebVisualization::TebVisualization() : initialized_(false)
 {
@@ -98,6 +100,8 @@ void TebVisualization::publishLocalPlanAndPoses(const TimedElasticBand& teb) con
 {
   if ( printErrorWhenNotInitialized() )
     return;
+    //ROS_INFO("TEBVis");
+
   
     // create path msg
     nav_msgs::Path teb_path;
@@ -111,9 +115,9 @@ void TebVisualization::publishLocalPlanAndPoses(const TimedElasticBand& teb) con
     
     // fill path msgs with teb configurations
     //if (teb.sizePoses()>posesize){
-    if (true){
+    if (false){
       posesize = teb.sizePoses();
-          ROS_INFO("teb.suize: %i", teb.sizePoses());
+      ROS_INFO("teb.suize: %i", teb.sizePoses());
     ROS_INFO("tabelle poses:x,y, theta,x_diff,y_diff winkel, winkel_diff");
     for (int i=0; i < teb.sizePoses(); i++)
     {
@@ -127,9 +131,9 @@ void TebVisualization::publishLocalPlanAndPoses(const TimedElasticBand& teb) con
       y_old = y;
       double winkel = std::atan2(y_diff,x_diff);
 
-      // if(winkel<0){
-      //   winkel += 2*M_PI;
-      // }
+      if(winkel<0){
+        winkel += 2*M_PI;
+      }
       
       winkel_diff = winkel - winkel_old;
       winkel_old = winkel;
@@ -139,11 +143,17 @@ void TebVisualization::publishLocalPlanAndPoses(const TimedElasticBand& teb) con
       theta_old = theta;
 
       ROS_INFO(" %f %f %f %f %f %f %f ", x,y, theta,x_diff,y_diff, winkel, winkel_diff );
+      if (abs(winkel_diff)>2.5 && abs(winkel_diff)<4){
+      ROS_INFO(" richtungswechsel %f %f %f %f", x,y,theta,winkel_diff );
+      wendepunkt = i;}
     }
     }
-    
+    else{
+      posesize =teb.sizePoses();
+    }
     for (int i=0; i < teb.sizePoses(); i++)
     {
+      //ROS_INFO("Loop-for sizePoses");
       //ROS_INFO("teb.suize: %i", teb.sizePoses());
       geometry_msgs::PoseStamped pose;
       pose.header.frame_id = teb_path.header.frame_id;
@@ -174,8 +184,10 @@ void TebVisualization::publishLocalPlanAndPoses(const TimedElasticBand& teb) con
       theta_diff = std::abs(theta_old - theta);
       theta_old = theta;
 
-      if (abs(winkel_diff)>0.5){
+      if (abs(winkel_diff)>2.5 && abs(winkel_diff)<4){
       ROS_INFO(" richtungswechsel %f %f %f %f", x,y,theta,winkel_diff );
+      wendepunkt = i;
+      //teb.deletePoses(i, teb.sizePoses()-i);
       }
     }
     local_plan_pub_.publish(teb_path);

@@ -115,6 +115,8 @@ bool HomotopyClassPlanner::plan(const tf::Pose& start, const tf::Pose& goal, con
 bool HomotopyClassPlanner::plan(const PoseSE2& start, const PoseSE2& goal, const geometry_msgs::Twist* start_vel, bool free_goal_vel)
 {
   ROS_ASSERT_MSG(initialized_, "Call initialize() first.");
+    //ROS_INFO("Ht plann");
+
 
   // Update old TEBs with new start, goal and velocity
   updateAllTEBs(&start, &goal, start_vel);
@@ -473,6 +475,8 @@ void HomotopyClassPlanner::updateAllTEBs(const PoseSE2* start, const PoseSE2* go
 
 void HomotopyClassPlanner::optimizeAllTEBs(int iter_innerloop, int iter_outerloop)
 {
+    //ROS_INFO("HtCP 476");
+
   // optimize TEBs in parallel since they are independend of each other
   if (cfg_->hcp.enable_multithreading)
   {

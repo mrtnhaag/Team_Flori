@@ -180,6 +180,9 @@ boost::shared_ptr<g2o::SparseOptimizer> TebOptimalPlanner::initOptimizer()
   optimizer->setAlgorithm(solver);
   
   optimizer->initMultiThreading(); // required for >Eigen 3.1
+
+  //ROS_INFO("optimizer-return");
+
   
   return optimizer;
 }
@@ -293,6 +296,8 @@ bool TebOptimalPlanner::plan(const std::vector<geometry_msgs::PoseStamped>& init
 
 bool TebOptimalPlanner::plan(const tf::Pose& start, const tf::Pose& goal, const geometry_msgs::Twist* start_vel, bool free_goal_vel)
 {
+    ROS_INFO("optplanner z297- plan");
+
   PoseSE2 start_(start);
   PoseSE2 goal_(goal);
   return plan(start_, goal_, start_vel);
@@ -301,6 +306,8 @@ bool TebOptimalPlanner::plan(const tf::Pose& start, const tf::Pose& goal, const 
 bool TebOptimalPlanner::plan(const PoseSE2& start, const PoseSE2& goal, const geometry_msgs::Twist* start_vel, bool free_goal_vel)
 {	
   ROS_ASSERT_MSG(initialized_, "Call initialize() first.");
+    ROS_INFO("optplanner z307- plan");
+
   if (!teb_.isInit())
   {
     // init trajectory
@@ -333,6 +340,8 @@ bool TebOptimalPlanner::plan(const PoseSE2& start, const PoseSE2& goal, const ge
 
 bool TebOptimalPlanner::buildGraph(double weight_multiplier)
 {
+    //ROS_INFO("optplanner buildGraph");
+
   if (!optimizer_->edges().empty() || !optimizer_->vertices().empty())
   {
     ROS_WARN("Cannot build graph, because it is not empty. Call graphClear()!");
@@ -415,6 +424,8 @@ bool TebOptimalPlanner::optimizeGraph(int no_iterations,bool clear_after)
 
 void TebOptimalPlanner::clearGraph()
 {
+    //ROS_INFO("optplanner cleargraph");
+
   // clear optimizer states
   if (optimizer_)
   {

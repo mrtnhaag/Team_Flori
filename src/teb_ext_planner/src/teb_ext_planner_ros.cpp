@@ -227,6 +227,9 @@ bool TebExtPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   geometry_msgs::TwistStamped dummy_velocity, cmd_vel_stamped;
   uint32_t outcome = computeVelocityCommands(dummy_pose, dummy_velocity, cmd_vel_stamped, dummy_message);
   cmd_vel = cmd_vel_stamped.twist;
+  double x= cmd_vel.linear.x;
+  ROS_INFO("movement %f", x);
+
   return outcome == mbf_msgs::ExePathResult::SUCCESS;
 }
 
@@ -236,6 +239,8 @@ uint32_t TebExtPlannerROS::computeVelocityCommands(const geometry_msgs::PoseStam
                                                      std::string &message)
 {
   // check if plugin initialized
+    ROS_INFO("movement gros");
+
   if(!initialized_)
   {
     ROS_ERROR("teb_ext_planner has not been initialized, please call initialize() before using this planner");

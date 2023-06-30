@@ -126,6 +126,7 @@ public:
    * and the pose sequence to  \e ../../teb_poses.
    * @param teb const reference to a Timed_Elastic_Band
    */
+  
   void publishLocalPlanAndPoses(const TimedElasticBand& teb) const;
   
   /**
