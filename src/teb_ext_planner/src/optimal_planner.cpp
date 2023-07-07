@@ -191,6 +191,7 @@ boost::shared_ptr<g2o::SparseOptimizer> TebOptimalPlanner::initOptimizer()
 bool TebOptimalPlanner::optimizeTEB(int iterations_innerloop, int iterations_outerloop, bool compute_cost_afterwards,
                                     double obst_cost_scale, double viapoint_cost_scale, bool alternative_time_cost)
 {
+  backwardsOpt();
   //ROS_INFO("optplanner z191-optimizeTEB");
   if (cfg_->optim.optimization_activate==false) 
     return false;
@@ -340,7 +341,7 @@ bool TebOptimalPlanner::plan(const PoseSE2& start, const PoseSE2& goal, const ge
 
 bool TebOptimalPlanner::buildGraph(double weight_multiplier)
 {
-    //ROS_INFO("optplanner buildGraph");
+    ROS_INFO("optplanner buildGraph");
 
   if (!optimizer_->edges().empty() || !optimizer_->vertices().empty())
   {
@@ -1329,5 +1330,10 @@ bool TebOptimalPlanner::isTrajectoryFeasible(base_local_planner::CostmapModel* c
   }
   return true;
 }
+
+ void TebOptimalPlanner::backwardsOpt(){
+    ROS_INFO("optplanner");
+
+ } 
 
 } // namespace teb_ext_planner

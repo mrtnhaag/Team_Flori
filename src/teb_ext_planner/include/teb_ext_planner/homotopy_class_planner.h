@@ -506,6 +506,10 @@ public:
    * selection_dropping_probability parameter.
    */
   void randomlyDropTebs();
+  
+  //mein graffel
+  void homotopyBackwarts();
+
 
 protected:
 

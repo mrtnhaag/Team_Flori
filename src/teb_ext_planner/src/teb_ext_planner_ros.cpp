@@ -239,7 +239,8 @@ uint32_t TebExtPlannerROS::computeVelocityCommands(const geometry_msgs::PoseStam
                                                      std::string &message)
 {
   // check if plugin initialized
-    ROS_INFO("movement gros");
+    //ROS_INFO("movement gros");
+    //backwardsplaning();
 
   if(!initialized_)
   {
@@ -1216,6 +1217,11 @@ double TebExtPlannerROS::getNumberFromXMLRPC(XmlRpc::XmlRpcValue& value, const s
      throw std::runtime_error("Values in the footprint specification must be numbers");
    }
    return value.getType() == XmlRpc::XmlRpcValue::TypeInt ? (int)(value) : (double)(value);
+}
+
+void TebExtPlannerROS::backwardsplaning(){
+  ROS_INFO("backwardsplaning__teb_ext_planner");
+
 }
 
 } // end namespace teb_ext_planner

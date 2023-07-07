@@ -386,6 +386,13 @@ protected:
    * @param min_obst_dist desired distance to obstacles
    */
   void validateFootprints(double opt_inscribed_radius, double costmap_inscribed_radius, double min_obst_dist);
+
+  //meine
+    void backwardsplaning();
+  
+  /**
+  This one is wirtten by me
+   */
   
   
   void configureBackupModes(std::vector<geometry_msgs::PoseStamped>& transformed_plan,  int& goal_idx);

@@ -636,6 +636,15 @@ public:
    * @return \c true, if all tested trajectory points are inside the specified region, \c false otherwise.
    */
   bool isTrajectoryInsideRegion(double radius, double max_dist_behind_robot=-1, int skip_poses=0);
+
+//selfwritten
+  void backwardsTrajectory();
+  
+  /**
+   * @brief Check if all trajectory points are contained in a specific region
+   * 
+  written by me
+   */
   
   
   

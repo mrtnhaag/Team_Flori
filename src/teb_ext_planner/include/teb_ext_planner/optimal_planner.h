@@ -669,6 +669,13 @@ protected:
   void AddEdgesVelocityObstacleRatio();
   
   //@}
+
+  //My stuff
+  void backwardsOpt(); 
+
+  /**
+  Müll von mir
+   */
   
   
   /**

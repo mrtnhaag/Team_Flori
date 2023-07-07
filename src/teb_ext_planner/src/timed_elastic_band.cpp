@@ -556,6 +556,7 @@ int TimedElasticBand::findClosestTrajectoryPose(const Obstacle& obstacle, double
 
 void TimedElasticBand::updateAndPruneTEB(boost::optional<const PoseSE2&> new_start, boost::optional<const PoseSE2&> new_goal, int min_samples)
 {
+  //backwardsTrajectory();
   // first and simple approach: change only start confs (and virtual start conf for inital velocity)
   // TEST if optimizer can handle this "hard" placement
     //ROS_INFO("timed_elastic_band z555- prune");
@@ -630,6 +631,11 @@ bool TimedElasticBand::isTrajectoryInsideRegion(double radius, double max_dist_b
     }
     return true;
 }
+
+void TimedElasticBand::backwardsTrajectory(){
+  ROS_INFO("backwardsTrajectory_band");
+
+};
 
 
 

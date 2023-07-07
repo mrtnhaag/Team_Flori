@@ -115,7 +115,8 @@ bool HomotopyClassPlanner::plan(const tf::Pose& start, const tf::Pose& goal, con
 bool HomotopyClassPlanner::plan(const PoseSE2& start, const PoseSE2& goal, const geometry_msgs::Twist* start_vel, bool free_goal_vel)
 {
   ROS_ASSERT_MSG(initialized_, "Call initialize() first.");
-    //ROS_INFO("Ht plann");
+    //(ROS_INFO("Ht plann");
+    //homotopyBackwarts();
 
 
   // Update old TEBs with new start, goal and velocity
@@ -848,6 +849,12 @@ bool HomotopyClassPlanner::computeStartOrientation(const TebOptimalPlannerPtr pl
   orientation = std::atan2(start_vector[1], start_vector[0]);
   return true;
 }
+
+void HomotopyClassPlanner::homotopyBackwarts(){
+    ROS_INFO("backwardshomotopy");
+
+};
+
 
 
 } // end namespace
