@@ -39,6 +39,8 @@
 #include <teb_ext_planner/timed_elastic_band.h>
 
 #include <limits>
+#include <fstream>
+
 
 namespace teb_ext_planner
 {
@@ -390,7 +392,26 @@ bool TimedElasticBand::initTrajectoryToGoal(const PoseSE2& start, const PoseSE2&
 
 bool TimedElasticBand::initTrajectoryToGoal(const std::vector<geometry_msgs::PoseStamped>& plan, double max_vel_x, double max_vel_theta, bool estimate_orient, int min_samples, bool guess_backwards_motion)
 {
-  //ROS_INFO("initTrajectoryToGoal z391");
+  ROS_INFO("initTrajectoryToGoal z391");
+  std::ofstream outputFile;
+  outputFile.open("//home/martin/Documents/Master/Thesis/Team_Flori/log_file.txt",std::ios::trunc);
+  outputFile.close();
+
+  outputFile.open("//home/martin/Documents/Master/Thesis/Team_Flori/log_file.txt",std::ios::app);
+
+  if (outputFile.is_open())
+  {
+    // File is open, proceed with writing
+    outputFile << "Testline" << std::endl;
+    // ...
+  }
+  else
+  {
+    ROS_INFO("no log written");
+  }
+
+
+
   if (!isInit())
   {
     PoseSE2 start(plan.front().pose);
@@ -407,11 +428,13 @@ bool TimedElasticBand::initTrajectoryToGoal(const std::vector<geometry_msgs::Pos
     for (int i=1; i<(int)plan.size()-1; ++i)
     {
         double yaw;
+        double dx;
+        double dy;
         if (estimate_orient)
         {
             // get yaw from the orientation of the distance vector between pose_{i+1} and pose_{i}
-            double dx = plan[i+1].pose.position.x - plan[i].pose.position.x;
-            double dy = plan[i+1].pose.position.y - plan[i].pose.position.y;
+            dx = plan[i+1].pose.position.x - plan[i].pose.position.x;
+            dy = plan[i+1].pose.position.y - plan[i].pose.position.y;
             yaw = std::atan2(dy,dx);
             if (backwards)
                 yaw = g2o::normalize_theta(yaw+M_PI);
@@ -421,6 +444,11 @@ bool TimedElasticBand::initTrajectoryToGoal(const std::vector<geometry_msgs::Pos
             yaw = tf::getYaw(plan[i].pose.orientation);
         }
         PoseSE2 intermediate_pose(plan[i].pose.position.x, plan[i].pose.position.y, yaw);
+        //ROS_INFO("posese2%f %f %f",plan[i].pose.position.x, plan[i].pose.position.y, yaw);
+        outputFile << "["<<plan[i].pose.position.x<<","<< plan[i].pose.position.y<<","<<dx<<","<<dy<< "]"<<","<<std::endl;
+
+        
+
         double dt = estimateDeltaT(BackPose(), intermediate_pose, max_vel_x, max_vel_theta);
         addPoseAndTimeDiff(intermediate_pose, dt);
     }
@@ -449,7 +477,7 @@ bool TimedElasticBand::initTrajectoryToGoal(const std::vector<geometry_msgs::Pos
     ROS_WARN("Number of TEB configurations: %d, Number of TEB timediffs: %d", sizePoses(), sizeTimeDiffs());
     return false;
   }
-  
+  outputFile.close();
   return true;
 }
 
@@ -637,6 +665,12 @@ void TimedElasticBand::backwardsTrajectory(){
 
 };
 
+void TimedElasticBand::addPoseBack(const PoseSE2& pose, bool fixed)
+{
+  VertexPose* pose_vertex = new VertexPose(pose, fixed);
+  rear_pose_vec_.push_back( pose_vertex );
+  return;
+}
 
 
 

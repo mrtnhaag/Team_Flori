@@ -638,9 +638,7 @@ public:
   bool isTrajectoryInsideRegion(double radius, double max_dist_behind_robot=-1, int skip_poses=0);
 
 //selfwritten
-  void backwardsTrajectory();
-  
-  /**
+    /**
    * @brief Check if all trajectory points are contained in a specific region
    * 
   written by me
@@ -649,9 +647,23 @@ public:
   
   
   //@}
+  void backwardsTrajectory();
+  
+
+    //@{
+  
+  /**
+   * @brief append a new Pose representing the rear car pose
+   * @param pose PoseSE2 to push back on the internal PoseSequence
+   * @param fixed Mark the pose to be fixed or unfixed during trajectory optimization (important for the TebOptimalPlanner)
+   */
+  void addPoseBack(const PoseSE2& pose, bool fixed=false);  
 	
 protected:
   PoseSequence pose_vec_; //!< Internal container storing the sequence of optimzable pose vertices
+  //meins
+  PoseSequence rear_pose_vec_;
+  
   TimeDiffSequence timediff_vec_;  //!< Internal container storing the sequence of optimzable timediff vertices
   
 public:

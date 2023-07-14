@@ -671,7 +671,7 @@ protected:
   //@}
 
   //My stuff
-  void backwardsOpt(); 
+  void AddBackwardsEdges(); 
 
   /**
   Müll von mir

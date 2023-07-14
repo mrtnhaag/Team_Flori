@@ -53,7 +53,8 @@
 #include <memory>
 #include <limits>
 
-
+//meine includes
+#include <teb_ext_planner/g2o_types/edge_motion_rev.h>
 namespace teb_ext_planner
 {
 
@@ -157,6 +158,8 @@ void TebOptimalPlanner::registerG2OTypes()
   factory->registerType("EDGE_DYNAMIC_OBSTACLE", new g2o::HyperGraphElementCreator<EdgeDynamicObstacle>);
   factory->registerType("EDGE_VIA_POINT", new g2o::HyperGraphElementCreator<EdgeViaPoint>);
   factory->registerType("EDGE_PREFER_ROTDIR", new g2o::HyperGraphElementCreator<EdgePreferRotDir>);
+  //mein edge type
+  factory->registerType("EDGE_MOTION_REV", new g2o::HyperGraphElementCreator<EdgeMotionRev>);
   return;
 }
 
@@ -191,7 +194,7 @@ boost::shared_ptr<g2o::SparseOptimizer> TebOptimalPlanner::initOptimizer()
 bool TebOptimalPlanner::optimizeTEB(int iterations_innerloop, int iterations_outerloop, bool compute_cost_afterwards,
                                     double obst_cost_scale, double viapoint_cost_scale, bool alternative_time_cost)
 {
-  backwardsOpt();
+  //backwardsOpt();
   //ROS_INFO("optplanner z191-optimizeTEB");
   if (cfg_->optim.optimization_activate==false) 
     return false;
@@ -388,7 +391,7 @@ bool TebOptimalPlanner::buildGraph(double weight_multiplier)
 
 bool TebOptimalPlanner::optimizeGraph(int no_iterations,bool clear_after)
 {
-  //ROS_INFO("optplanner z381-optimizegraph");
+  ROS_INFO("optplanner z381-optimizegraph");
   if (cfg_->robot.max_vel_x<0.01)
   {
     ROS_WARN("optimizeGraph(): Robot Max Velocity is smaller than 0.01m/s. Optimizing aborted...");
@@ -445,8 +448,16 @@ void TebOptimalPlanner::clearGraph()
 
 void TebOptimalPlanner::AddTEBVertices()
 {
+  bool add_backwards_vert = true;
   // add vertices to graph
+  ROS_INFO("addVertices");
+
   ROS_DEBUG_COND(cfg_->optim.optimization_verbose, "Adding TEB vertices ...");
+
+  if(add_backwards_vert){
+    ROS_INFO("add backw verts");
+  }
+
   unsigned int id_counter = 0; // used for vertices ids
   obstacles_per_vertex_.resize(teb_.sizePoses());
   auto iter_obstacle = obstacles_per_vertex_.begin();
@@ -1331,9 +1342,11 @@ bool TebOptimalPlanner::isTrajectoryFeasible(base_local_planner::CostmapModel* c
   return true;
 }
 
- void TebOptimalPlanner::backwardsOpt(){
+ void TebOptimalPlanner::AddBackwardsEdges(){
     ROS_INFO("optplanner");
-
+    if(false){
+      EdgePreferRotDir* rotdir_edge = new EdgePreferRotDir;
+    }
  } 
 
 } // namespace teb_ext_planner
