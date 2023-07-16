@@ -39,7 +39,7 @@ floorplan
 # throw in a robot
 floribot
 (
-  pose [ 2.0 2.0 0.0 0.0 ]
+  pose [ 2.0 2.0 0.0 0 ]
   name "robot"
 )
 

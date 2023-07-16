@@ -117,6 +117,8 @@ void TebExtPlannerROS::initialize(std::string name, tf2_ros::Buffer* tf, costmap
     else
     {
       planner_ = PlannerInterfacePtr(new TebOptimalPlanner(cfg_, &obstacles_, robot_model, visualization_, &via_points_));
+      //planner_ = PlannerInterfacePtr(new TebOptimalPlanner(cfg_, &obstacles_, robot_model, visualization_, &via_points_, &nh_));
+
       ROS_INFO("Parallel planning in distinctive topologies disabled.");
     }
     
@@ -228,7 +230,7 @@ bool TebExtPlannerROS::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   uint32_t outcome = computeVelocityCommands(dummy_pose, dummy_velocity, cmd_vel_stamped, dummy_message);
   cmd_vel = cmd_vel_stamped.twist;
   double x= cmd_vel.linear.x;
-  ROS_INFO("movement %f", x);
+  //ROS_INFO("movement %f", x);
 
   return outcome == mbf_msgs::ExePathResult::SUCCESS;
 }

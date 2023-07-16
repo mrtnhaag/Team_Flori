@@ -68,6 +68,9 @@
 #include <nav_msgs/Odometry.h>
 #include <limits.h>
 
+//mein graffel
+#include <sensor_msgs/JointState.h>
+
 namespace teb_ext_planner
 {
 
@@ -115,7 +118,7 @@ public:
    * @param via_points Container storing via-points (optional)
    */
   TebOptimalPlanner(const TebConfig& cfg, ObstContainer* obstacles = NULL, RobotFootprintModelPtr robot_model = boost::make_shared<PointRobotFootprint>(),
-                    TebVisualizationPtr visual = TebVisualizationPtr(), const ViaPointContainer* via_points = NULL);
+                    TebVisualizationPtr visual = TebVisualizationPtr(), const ViaPointContainer* via_points = NULL/*, ros::NodeHandle& nh*/);
   
   /**
    * @brief Destruct the optimal planner.
@@ -673,6 +676,8 @@ protected:
   //My stuff
   void AddBackwardsEdges(); 
 
+  void BodyAngleCB(const sensor_msgs::JointState::ConstPtr& msg); 
+
   /**
   Müll von mir
    */
@@ -704,6 +709,12 @@ protected:
 
   bool initialized_; //!< Keeps track about the correct initialization of this class
   bool optimized_; //!< This variable is \c true as long as the last optimization has been completed successful
+  bool printonce;
+
+  ros::Subscriber bodyangleSub_;
+  double bodyAngle;
+  std::string node_handle_name = "~/rev_cost/";
+  ros::NodeHandle* nh_;
   
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW    

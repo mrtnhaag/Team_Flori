@@ -55,13 +55,14 @@
 
 //meine includes
 #include <teb_ext_planner/g2o_types/edge_motion_rev.h>
+#include <ros/ros.h>
 namespace teb_ext_planner
 {
 
 // ============== Implementation ===================
 
 TebOptimalPlanner::TebOptimalPlanner() : cfg_(NULL), obstacles_(NULL), via_points_(NULL), cost_(HUGE_VAL), prefer_rotdir_(RotType::none),
-                                         robot_model_(new PointRobotFootprint()), initialized_(false), optimized_(false)
+                                         robot_model_(new PointRobotFootprint()), initialized_(false), optimized_(false)//, nh_(nh)
 {    
 }
   
@@ -78,6 +79,16 @@ TebOptimalPlanner::~TebOptimalPlanner()
   //  g2o::Factory::destroy();
   //g2o::OptimizationAlgorithmFactory::destroy();
   //g2o::HyperGraphActionLibrary::destroy();
+//mein subscriber zeug
+  char** chararry;
+  int x =0;
+  if (!ros::isInitialized())
+  {
+    ros::init(x,chararry,"optplanner_callback");
+  }
+  //bodyangleSub_ = nh_.subscribe<sensor_msgs::JointState>(
+  //"joint_states", 1,
+  //[this](const sensor_msgs::JointState::ConstPtr& msg) { BodyAngleCB(msg); });
 }
 
 void TebOptimalPlanner::updateRobotModel(RobotFootprintModelPtr robot_model)
@@ -89,6 +100,7 @@ void TebOptimalPlanner::initialize(const TebConfig& cfg, ObstContainer* obstacle
 {    
   // init optimizer (set solver and block ordering settings)
   optimizer_ = initOptimizer();
+
   
   cfg_ = &cfg;
   obstacles_ = obstacles;
@@ -194,8 +206,7 @@ boost::shared_ptr<g2o::SparseOptimizer> TebOptimalPlanner::initOptimizer()
 bool TebOptimalPlanner::optimizeTEB(int iterations_innerloop, int iterations_outerloop, bool compute_cost_afterwards,
                                     double obst_cost_scale, double viapoint_cost_scale, bool alternative_time_cost)
 {
-  //backwardsOpt();
-  //ROS_INFO("optplanner z191-optimizeTEB");
+
   if (cfg_->optim.optimization_activate==false) 
     return false;
   
@@ -261,7 +272,6 @@ void TebOptimalPlanner::setVelocityGoal(const geometry_msgs::Twist& vel_goal)
 bool TebOptimalPlanner::plan(const std::vector<geometry_msgs::PoseStamped>& initial_plan, const geometry_msgs::Twist* start_vel, bool free_goal_vel)
 {    
   ROS_ASSERT_MSG(initialized_, "Call initialize() first.");
-  ROS_INFO("optplanner z257- plan");
 
   if (!teb_.isInit())
   {
@@ -300,7 +310,6 @@ bool TebOptimalPlanner::plan(const std::vector<geometry_msgs::PoseStamped>& init
 
 bool TebOptimalPlanner::plan(const tf::Pose& start, const tf::Pose& goal, const geometry_msgs::Twist* start_vel, bool free_goal_vel)
 {
-    ROS_INFO("optplanner z297- plan");
 
   PoseSE2 start_(start);
   PoseSE2 goal_(goal);
@@ -310,7 +319,6 @@ bool TebOptimalPlanner::plan(const tf::Pose& start, const tf::Pose& goal, const 
 bool TebOptimalPlanner::plan(const PoseSE2& start, const PoseSE2& goal, const geometry_msgs::Twist* start_vel, bool free_goal_vel)
 {	
   ROS_ASSERT_MSG(initialized_, "Call initialize() first.");
-    ROS_INFO("optplanner z307- plan");
 
   if (!teb_.isInit())
   {
@@ -344,7 +352,7 @@ bool TebOptimalPlanner::plan(const PoseSE2& start, const PoseSE2& goal, const ge
 
 bool TebOptimalPlanner::buildGraph(double weight_multiplier)
 {
-    ROS_INFO("optplanner buildGraph");
+    //ROS_INFO("optplanner buildGraph");
 
   if (!optimizer_->edges().empty() || !optimizer_->vertices().empty())
   {
@@ -383,6 +391,9 @@ bool TebOptimalPlanner::buildGraph(double weight_multiplier)
 
   AddEdgesPreferRotDir();
 
+  if (true)
+    AddBackwardsEdges();
+
   if (cfg_->optim.weight_velocity_obstacle_ratio > 0)
     AddEdgesVelocityObstacleRatio();
     
@@ -391,7 +402,7 @@ bool TebOptimalPlanner::buildGraph(double weight_multiplier)
 
 bool TebOptimalPlanner::optimizeGraph(int no_iterations,bool clear_after)
 {
-  ROS_INFO("optplanner z381-optimizegraph");
+  //ROS_INFO("optplanner z381-optimizegraph");
   if (cfg_->robot.max_vel_x<0.01)
   {
     ROS_WARN("optimizeGraph(): Robot Max Velocity is smaller than 0.01m/s. Optimizing aborted...");
@@ -448,15 +459,11 @@ void TebOptimalPlanner::clearGraph()
 
 void TebOptimalPlanner::AddTEBVertices()
 {
-  bool add_backwards_vert = true;
   // add vertices to graph
-  ROS_INFO("addVertices");
+  //ROS_INFO("addVertices");
 
   ROS_DEBUG_COND(cfg_->optim.optimization_verbose, "Adding TEB vertices ...");
 
-  if(add_backwards_vert){
-    ROS_INFO("add backw verts");
-  }
 
   unsigned int id_counter = 0; // used for vertices ids
   obstacles_per_vertex_.resize(teb_.sizePoses());
@@ -1343,10 +1350,51 @@ bool TebOptimalPlanner::isTrajectoryFeasible(base_local_planner::CostmapModel* c
 }
 
  void TebOptimalPlanner::AddBackwardsEdges(){
-    ROS_INFO("optplanner");
-    if(false){
-      EdgePreferRotDir* rotdir_edge = new EdgePreferRotDir;
-    }
+    //ROS_INFO("AddBackwardsEdges");
+      // create edge for satisfiying kinematic constraints
+  Eigen::Matrix<double,1,1> information_backwards;
+  information_backwards.fill(5);
+  for (int i=0; i < teb_.sizePoses()-1 ; ++i) 
+  {
+    EdgeMotionRev* backwards_edge = new EdgeMotionRev;
+    backwards_edge->setVertex(0,teb_.PoseVertex(i));
+    backwards_edge->setVertex(1,teb_.PoseVertex(i+1));      
+    backwards_edge->setTeb(teb_);
+    backwards_edge->setBodyAngle(bodyAngle);
+    backwards_edge->setInformation(information_backwards);
+    
+    
+    optimizer_->addEdge(backwards_edge);
+  }
  } 
+
+void TebOptimalPlanner::BodyAngleCB(const sensor_msgs::JointState::ConstPtr& msg) 
+  {
+  std::string target_joint_name = "j_revolute_front_rear";
+  ROS_INFO("body angle CB");
+  
+  // Find the index of the target joint in the name array
+  int target_joint_index = -1;
+  for (size_t i = 0; i < msg->name.size(); ++i)
+  {
+    if (msg->name[i] == target_joint_name)
+    {
+      target_joint_index = i;
+      break;
+    }
+  }
+  
+  if (target_joint_index != -1)
+  {
+
+    bodyAngle = msg->position[target_joint_index];
+
+  }
+  else
+  {
+    //ROS_INFO("kein bodyAngle")
+  }
+
+  }
 
 } // namespace teb_ext_planner

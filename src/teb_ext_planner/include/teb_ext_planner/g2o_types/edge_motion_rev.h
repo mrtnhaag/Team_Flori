@@ -48,6 +48,20 @@
 #include <teb_ext_planner/g2o_types/penalties.h>
 #include "g2o/core/base_unary_edge.h"
 
+#include <ros/ros.h>
+#include <ros/assert.h>
+
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/PoseArray.h>
+#include <tf/tf.h>
+
+#include <complex>
+#include <iterator>
+
+#include <teb_ext_planner/obstacles.h>
+#include <sensor_msgs/JointState.h>
+
+
 
 namespace teb_ext_planner
 {
@@ -72,19 +86,55 @@ public:
   EdgeMotionRev() 
   {
     _measurement = 1;
+    
   }
- 
+  const TimedElasticBand* teb_;
+  double BodyAngle;
+  std::string node_handle_name = "~/rev_cost/";
+  ros::NodeHandle nh_;
+  //const TebConfig* cfg_; //!< Store TebConfig class for parameters
+  
   /**
    * @brief Actual cost function
    */    
   void computeError()
   {
+    
+    double achsabs = 0.383;
+    const std::vector<teb_ext_planner::VertexPose*> pose_vec = teb_->poses();
+    int sizePoses = teb_->sizePoses();
+    //ROS_INFO("%f",pose_vec[0]->theta());
+   //ROS_INFO("%f",BodyAngle);
+
+    int sizeverts = sizeof(_vertices)/sizeof(_vertices[0]);
     const VertexPose* conf1 = static_cast<const VertexPose*>(_vertices[0]);
     const VertexPose* conf2 = static_cast<const VertexPose*>(_vertices[1]);
-    
-    _error[0] = penaltyBoundFromBelow( _measurement*g2o::normalize_theta(conf2->theta()-conf1->theta()) , 0, 0);
+    //ROS_INFO("rev Error comp");
+    double thetapose = 0;
 
-    ROS_ASSERT_MSG(std::isfinite(_error[0]), "EdgeMotionRev::computeError() _error[0]=%f\n",_error[0]);
+    if(conf1->theta()<0){
+      thetapose += 2*M_PI;
+    }
+
+    Eigen::Vector2d deltaS = conf2->position() - conf1->position();
+    double winkelmove = std::atan2(deltaS[1],deltaS[0]);
+    if(winkelmove<0){
+      winkelmove += 2*M_PI;
+    }
+
+    double winkeldiff = abs (winkelmove - thetapose);
+
+    if (winkeldiff>  5 || winkeldiff < 1.5){// rückwärtsfahrt
+      //ROS_INFO("vorwarts %f",winkeldiff);
+      _error[0] = 0;
+    }
+    else{
+      _error[0] = 0;
+      //ROS_INFO("ruckwarts %f",winkeldiff);
+    }
+
+
+    //ROS_ASSERT_MSG(std::isfinite(_error[0]), "EdgeMotionRev::computeError() _error[0]=%f\n",_error[0]);
   }
 
   /**
@@ -95,9 +145,17 @@ public:
   {
     _measurement = dir;
   }
-  
-  /** Prefer rotations to the right */
-  void preferRight() {_measurement = -1;}
+
+  void setTeb(TimedElasticBand& teb)
+  {
+    teb_ = &teb;
+  }
+
+  void setBodyAngle(double angle)
+  {
+    BodyAngle = angle;
+  }
+
     
   /** Prefer rotations to the right */
   void preferLeft() {_measurement = 1;}  

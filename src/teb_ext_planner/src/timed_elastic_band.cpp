@@ -665,12 +665,7 @@ void TimedElasticBand::backwardsTrajectory(){
 
 };
 
-void TimedElasticBand::addPoseBack(const PoseSE2& pose, bool fixed)
-{
-  VertexPose* pose_vertex = new VertexPose(pose, fixed);
-  rear_pose_vec_.push_back( pose_vertex );
-  return;
-}
+
 
 
 
