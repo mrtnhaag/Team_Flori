@@ -19,6 +19,8 @@
   <!-- <arg name="world_name" default="generated.world"/> -->
 
   <rosparam file="$(find floribot_simulation)/config/joints.yaml" command="load"/> 
+  
+ 
 
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
 
@@ -101,8 +103,8 @@
     <param name="base_global_planner" value="rrt_star_global_planner/RRTStarPlanner" /> -->
 		<param name="base_global_planner" value="global_planner/GlobalPlanner" /> 
 		<!-- <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" /> -->
-    <!-- <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> -->
-    <param name="base_local_planner" value="teb_ext_planner/TebExtPlannerROS" />
+     <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> 
+    <!--param name="base_local_planner" value="teb_ext_planner/TebExtPlannerROS" /-->
 
 		<rosparam file="$(find floribot_simulation)/param/common_costmap_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find floribot_simulation)/param/common_costmap_params.yaml" command="load" ns="local_costmap" /> 
@@ -111,11 +113,14 @@
 		<rosparam file="$(find floribot_simulation)/param/move_base_params.yaml" command="load" />
 		<rosparam file="$(find floribot_simulation)/param/local_dwa_local_planner_params.yaml" command="load" />
 		<rosparam file="$(find floribot_simulation)/param/global_global_planner_params.yaml" command="load" /> 
+		<rosparam file="$(find teb_local_planner_tutorials)/cfg/diff_drive/costmap_converter_params.yaml" command="load" />
 	</node>
 
   <rosparam file="$(find floribot_simulation)/config/teb_local_params.yaml" command="load"/> 
 
   <!-- <node name="drive_pub" pkg="floribot_simulation" type="drive_pub.py"/> -->
+  
+
 
   <!-- Open Simulation in rviz -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />

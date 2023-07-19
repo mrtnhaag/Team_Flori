@@ -104,7 +104,7 @@ public:
     const std::vector<teb_ext_planner::VertexPose*> pose_vec = teb_->poses();
     int sizePoses = teb_->sizePoses();
     //ROS_INFO("%f",pose_vec[0]->theta());
-   //ROS_INFO("%f",BodyAngle);
+    //ROS_INFO("%f",BodyAngle);
 
     int sizeverts = sizeof(_vertices)/sizeof(_vertices[0]);
     const VertexPose* conf1 = static_cast<const VertexPose*>(_vertices[0]);

@@ -118,6 +118,8 @@ void TebExtPlannerROS::initialize(std::string name, tf2_ros::Buffer* tf, costmap
     {
       planner_ = PlannerInterfacePtr(new TebOptimalPlanner(cfg_, &obstacles_, robot_model, visualization_, &via_points_));
       //planner_ = PlannerInterfacePtr(new TebOptimalPlanner(cfg_, &obstacles_, robot_model, visualization_, &via_points_, &nh_));
+      //planner_->setnh(nh);
+      
 
       ROS_INFO("Parallel planning in distinctive topologies disabled.");
     }
@@ -179,6 +181,8 @@ void TebExtPlannerROS::initialize(std::string name, tf2_ros::Buffer* tf, costmap
 
     // setup callback for custom via-points
     via_points_sub_ = nh.subscribe("via_points", 1, &TebExtPlannerROS::customViaPointsCB, this);
+
+    dynamic_cast<TebOptimalPlanner*>(planner_.get())->setnh(nh);
     
     // initialize failure detector
     ros::NodeHandle nh_move_base("~");

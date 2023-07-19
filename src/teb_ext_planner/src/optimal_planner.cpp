@@ -80,15 +80,11 @@ TebOptimalPlanner::~TebOptimalPlanner()
   //g2o::OptimizationAlgorithmFactory::destroy();
   //g2o::HyperGraphActionLibrary::destroy();
 //mein subscriber zeug
-  char** chararry;
-  int x =0;
-  if (!ros::isInitialized())
-  {
-    ros::init(x,chararry,"optplanner_callback");
-  }
-  //bodyangleSub_ = nh_.subscribe<sensor_msgs::JointState>(
-  //"joint_states", 1,
-  //[this](const sensor_msgs::JointState::ConstPtr& msg) { BodyAngleCB(msg); });
+//if(nh_ != nullptr)
+  //bodyangleSub_ = nh_->subscribe("joint_states", 1,&TebOptimalPlanner::BodyAngleCB, this);
+//nh.subscribe("obstacles", 1, &TebExtPlannerROS::customObstacleCB, this);
+//else
+  //ROS_INFO("nullptr");
 }
 
 void TebOptimalPlanner::updateRobotModel(RobotFootprintModelPtr robot_model)
@@ -1353,14 +1349,17 @@ bool TebOptimalPlanner::isTrajectoryFeasible(base_local_planner::CostmapModel* c
     //ROS_INFO("AddBackwardsEdges");
       // create edge for satisfiying kinematic constraints
   Eigen::Matrix<double,1,1> information_backwards;
+  //information_backwards.fill(cfg_->optim.weight_rev_path);
   information_backwards.fill(5);
+
   for (int i=0; i < teb_.sizePoses()-1 ; ++i) 
   {
     EdgeMotionRev* backwards_edge = new EdgeMotionRev;
     backwards_edge->setVertex(0,teb_.PoseVertex(i));
     backwards_edge->setVertex(1,teb_.PoseVertex(i+1));      
     backwards_edge->setTeb(teb_);
-    backwards_edge->setBodyAngle(bodyAngle);
+    //backwards_edge->setBodyAngle(bodyAngle);
+    
     backwards_edge->setInformation(information_backwards);
     
     
@@ -1395,6 +1394,12 @@ void TebOptimalPlanner::BodyAngleCB(const sensor_msgs::JointState::ConstPtr& msg
     //ROS_INFO("kein bodyAngle")
   }
 
+  }
+
+  void TebOptimalPlanner::setnh(ros::NodeHandle& nh)
+  {
+    nh_ = &nh;
+    ROS_INFO("nh got set");
   }
 
 } // namespace teb_ext_planner

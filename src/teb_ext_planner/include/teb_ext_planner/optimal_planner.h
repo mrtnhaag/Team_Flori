@@ -103,6 +103,13 @@ typedef std::vector< Eigen::Vector2d, Eigen::aligned_allocator<Eigen::Vector2d> 
 class TebOptimalPlanner : public PlannerInterface
 {
 public:
+
+  ros::Subscriber bodyangleSub_;
+  double bodyAngle;
+  std::string node_handle_name = "~/rev_cost/";
+  ros::NodeHandle* nh_ = nullptr;
+  void setnh(ros::NodeHandle& nh);
+  
     
   /**
    * @brief Default constructor
@@ -511,6 +518,8 @@ public:
           double circumscribed_radius=0.0, int look_ahead_idx=-1, double feasibility_check_lookahead_distance=-1.0);
   
   //@}
+
+  
   
 protected:
   
@@ -677,6 +686,7 @@ protected:
   void AddBackwardsEdges(); 
 
   void BodyAngleCB(const sensor_msgs::JointState::ConstPtr& msg); 
+  
 
   /**
   Müll von mir
@@ -711,13 +721,11 @@ protected:
   bool optimized_; //!< This variable is \c true as long as the last optimization has been completed successful
   bool printonce;
 
-  ros::Subscriber bodyangleSub_;
-  double bodyAngle;
-  std::string node_handle_name = "~/rev_cost/";
-  ros::NodeHandle* nh_;
-  
+
+
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW    
+  
 };
 
 //! Abbrev. for shared instances of the TebOptimalPlanner

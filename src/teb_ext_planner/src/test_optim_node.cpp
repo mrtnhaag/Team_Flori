@@ -106,6 +106,7 @@ int main( int argc, char** argv )
   obst_vector.push_back( boost::make_shared<PointObstacle>(-3,1) );
   obst_vector.push_back( boost::make_shared<PointObstacle>(6,2) );
   obst_vector.push_back( boost::make_shared<PointObstacle>(0,0.1) );
+  if(false){
  //obst_vector.push_back( boost::make_shared<LineObstacle>(1,1.5,1,-1.5) ); //90 deg oben unten
  //obst_vector.push_back( boost::make_shared<LineObstacle>(1,0,-2,0) ); //180 deg links rechts
  obst_vector.push_back( boost::make_shared<LineObstacle>(0,0,1,0) ); //180 deg links rechts
@@ -120,6 +121,20 @@ int main( int argc, char** argv )
   obst_vector.push_back( boost::make_shared<LineObstacle>(2,-4.5,2,-10) ); //90 deg oben unten
   obst_vector.push_back( boost::make_shared<LineObstacle>(0.5,0,0.5,10) ); //90 deg oben unten
   obst_vector.push_back( boost::make_shared<LineObstacle>(0.5,-3,0.5,-20) ); //90 deg oben unten
+  }
+  if(false)
+  {
+    obst_vector.push_back( boost::make_shared<LineObstacle>(-5,-2,5,-2) );
+    obst_vector.push_back( boost::make_shared<LineObstacle>(-5,-4,3,-4) );
+    obst_vector.push_back( boost::make_shared<LineObstacle>(-5,-2,-5,-4) );
+    obst_vector.push_back( boost::make_shared<LineObstacle>( 3,-4,3,-13) );
+    obst_vector.push_back( boost::make_shared<LineObstacle>(3,-13,13,-13) );
+    obst_vector.push_back( boost::make_shared<LineObstacle>(13,-13,13,-11) );
+    obst_vector.push_back( boost::make_shared<LineObstacle>(13,-11,5,-11) );
+    obst_vector.push_back( boost::make_shared<LineObstacle>(5,-11,5,-2) );
+
+
+  }
 
   // Dynamic obstacles
   Eigen::Vector2d vel (0.1, -0.3);
@@ -176,9 +191,19 @@ int main( int argc, char** argv )
 // Planning loop
 void CB_mainCycle(const ros::TimerEvent& e)
 {
-      ROS_INFO("test_oiptim z180");
+    //  ROS_INFO("test_oiptim z180");
+  // double x_start =config.optim.x_start;
+  // double y_start =config.optim.y_start;
+  // double theta_start =config.optim.theta_start;
+  // double x_goal =config.optim.x_goal;
+  // double y_goal =config.optim.y_goal;
+  // double theta_goal =config.optim.theta_goal;
+  //ROS_INFO("x_goal is %f", config.optim.x_goal);
+  //ROS_INFO("x_goal is %f", config.optim.weight_rev_path);
 
+  //planner->plan(PoseSE2(x_start,y_start,theta_start), PoseSE2(x_goal,y_goal,theta_goal)); // hardcoded start and goal for testing purposes
   planner->plan(PoseSE2(-4,-3,0), PoseSE2(4,-3,0)); // hardcoded start and goal for testing purposes
+
 
 }
 

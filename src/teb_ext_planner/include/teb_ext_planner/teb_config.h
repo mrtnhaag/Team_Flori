@@ -174,6 +174,16 @@ public:
 
     double weight_adapt_factor; //!< Some special weights (currently 'weight_obstacle') are repeatedly scaled by this factor in each outer TEB iteration (weight_new = weight_old*factor); Increasing weights iteratively instead of setting a huge value a-priori leads to better numerical conditions of the underlying optimization problem.
     double obstacle_cost_exponent; //!< Exponent for nonlinear obstacle cost (cost = linear_cost * obstacle_cost_exponent). Set to 1 to disable nonlinear cost (default)
+    //meins
+    // double weight_rev_path; //!< Optimization weight for flori path
+    // double x_start;
+    // double y_start;
+    // double theta_start;
+    // double x_goal;
+    // double y_goal;
+    // double theta_goal;
+
+
   } optim; //!< Optimization related parameters
 
 
@@ -340,6 +350,14 @@ public:
 
     optim.weight_adapt_factor = 2.0;
     optim.obstacle_cost_exponent = 1.0;
+    //meins
+    // optim.weight_rev_path = 0;
+    // optim.x_start = -4;
+    // optim.y_start = -3;
+    // optim.theta_start =0;
+    // optim.x_goal = 4;
+    // optim.y_goal = -3;
+    //optim.theta_goal =0;
 
     // Homotopy Class Planner
 
