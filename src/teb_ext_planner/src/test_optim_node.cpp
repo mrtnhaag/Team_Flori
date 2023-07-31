@@ -106,7 +106,7 @@ int main( int argc, char** argv )
   obst_vector.push_back( boost::make_shared<PointObstacle>(-3,1) );
   obst_vector.push_back( boost::make_shared<PointObstacle>(6,2) );
   obst_vector.push_back( boost::make_shared<PointObstacle>(0,0.1) );
-  if(false){
+  if(true){
  //obst_vector.push_back( boost::make_shared<LineObstacle>(1,1.5,1,-1.5) ); //90 deg oben unten
  //obst_vector.push_back( boost::make_shared<LineObstacle>(1,0,-2,0) ); //180 deg links rechts
  obst_vector.push_back( boost::make_shared<LineObstacle>(0,0,1,0) ); //180 deg links rechts

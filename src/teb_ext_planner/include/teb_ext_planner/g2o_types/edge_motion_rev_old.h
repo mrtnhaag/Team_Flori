@@ -40,8 +40,8 @@
  *
  * Author: Christoph Rösmann
  *********************************************************************/
-#ifndef EDGE_MOTION_REV_H_
-#define EDGE_MOTION_REV_H_
+#ifndef EDGE_MOTION_REV_OLD_H_
+#define EDGE_MOTION_REV_OLD_H_
 
 #include <teb_ext_planner/g2o_types/vertex_pose.h>
 #include <teb_ext_planner/g2o_types/base_teb_edges.h>
@@ -76,10 +76,10 @@ namespace teb_ext_planner
  * \e weight can be set using setInformation(). \n
  * @see TebOptimalPlanner::AddEdgeMotionRev
  */     
-class EdgeMotionRev : public BaseTebUnaryEdge<1, Eigen::Vector3d, VertexPose>
+class EdgeMotionRev : public BaseTebBinaryEdge<1, double, VertexPose, VertexPose>
 {
 public:
-  
+    
   /**
    * @brief Construct edge.
    */    
@@ -88,42 +88,77 @@ public:
     _measurement = 1;
     
   }
+  const TimedElasticBand* teb_;
   double BodyAngle;
-  double  _measurement;
-  Eigen::Vector2d rearPose_; 
-  double rearAngle_;
-  Eigen::Vector2d trajectoryPose_; 
-  double trajectoryAngle_;
-  Eigen::Vector2d dif_pose;
-  double dif_angle; 
-  double weight_path_;
-  double weight_angle_;
-  
-
+  std::string node_handle_name = "~/rev_cost/";
+  ros::NodeHandle nh_;
+  //const TebConfig* cfg_; //!< Store TebConfig class for parameters
   
   /**
    * @brief Actual cost function
    */    
   void computeError()
   {
-    dif_pose = rearPose_ - trajectoryPose_;
-    dif_angle = rearAngle_ - trajectoryAngle_;
+    
+    double achsabs = 0.383;
+    const std::vector<teb_ext_planner::VertexPose*> pose_vec = teb_->poses();
+    int sizePoses = teb_->sizePoses();
+    //ROS_INFO("%f",pose_vec[0]->theta());
+    //ROS_INFO("%f",BodyAngle);
 
-    _error[0] = dif_pose.norm()* weight_path_ + dif_angle* weight_angle_;
-    //_error[0] = std::clamp(dif_pose.norm(), 0, 5);
+    int sizeverts = sizeof(_vertices)/sizeof(_vertices[0]);
+    const VertexPose* conf1 = static_cast<const VertexPose*>(_vertices[0]);
+    const VertexPose* conf2 = static_cast<const VertexPose*>(_vertices[1]);
+    //ROS_INFO("rev Error comp");
+    double thetapose = 0;
+
+    if(conf1->theta()<0){
+      thetapose += 2*M_PI;
+    }
+
+    Eigen::Vector2d deltaS = conf2->position() - conf1->position();
+    double winkelmove = std::atan2(deltaS[1],deltaS[0]);
+    if(winkelmove<0){
+      winkelmove += 2*M_PI;
+    }
+
+    double winkeldiff = abs (winkelmove - thetapose);
+
+    if (winkeldiff>  5 || winkeldiff < 1.5){// rückwärtsfahrt
+      //ROS_INFO("vorwarts %f",winkeldiff);
+      _error[0] = 0;
+    }
+    else{
+      _error[0] = 0;
+      //ROS_INFO("ruckwarts %f",winkeldiff);
+    }
+
+
+    //ROS_ASSERT_MSG(std::isfinite(_error[0]), "EdgeMotionRev::computeError() _error[0]=%f\n",_error[0]);
+  }
+
+  /**
+   * @brief Specify the prefered direction of rotation
+   * @param dir +1 to prefer the left side, -1 to prefer the right side
+   */ 
+  void setRotDir(double dir)
+  {
+    _measurement = dir;
+  }
+
+  void setTeb(TimedElasticBand& teb)
+  {
+    teb_ = &teb;
+  }
+
+  void setBodyAngle(double angle)
+  {
+    BodyAngle = angle;
+  }
 
     
-  }
-
-  void setParams(Eigen::Vector2d rearPose, double rearAngle, Eigen::Vector2d trajectoryPose, double trajectoryAngle, double weight_path, double weight_angle)
-  {
-    rearPose_ = rearPose; 
-    rearAngle_ = rearAngle;
-    trajectoryPose_ = trajectoryPose; 
-    trajectoryAngle_ = trajectoryAngle;
-    weight_path_ = weight_path;
-    weight_angle_ = weight_angle;
-  }
+  /** Prefer rotations to the right */
+  void preferLeft() {_measurement = 1;}  
     
   
 public: 

@@ -389,6 +389,7 @@ protected:
 
   //meine
     void backwardsplaning();
+    void bodyAngleCB(const sensor_msgs::JointState::ConstPtr& msg);
   
   /**
   This one is wirtten by me
@@ -404,6 +405,8 @@ private:
 
   //meine
   std::vector<geometry_msgs::PoseStamped> local_plan_copy_;
+  double bodyAngle;
+  ros::Subscriber body_angle_sub_; //!< Subscriber for body angle
   //
 
   // external objects (store weak pointers)

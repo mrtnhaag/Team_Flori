@@ -108,7 +108,7 @@ public:
   double bodyAngle;
   std::string node_handle_name = "~/rev_cost/";
   ros::NodeHandle* nh_ = nullptr;
-  void setnh(ros::NodeHandle& nh);
+  void setBodyAngle(double angle) override;
   
     
   /**
@@ -685,7 +685,6 @@ protected:
   //My stuff
   void AddBackwardsEdges(); 
 
-  void BodyAngleCB(const sensor_msgs::JointState::ConstPtr& msg); 
   
 
   /**

@@ -109,7 +109,8 @@ void TebExtPlannerROS::initialize(std::string name, tf2_ros::Buffer* tf, costmap
     RobotFootprintModelPtr robot_model = getRobotFootprintFromParamServer(nh, cfg_);
     
     // create the planner instance
-    if (cfg_.hcp.enable_homotopy_class_planning)
+    //if (cfg_.hcp.enable_homotopy_class_planning)
+    if(false)
     {
       planner_ = PlannerInterfacePtr(new HomotopyClassPlanner(cfg_, &obstacles_, robot_model, visualization_, &via_points_));
       ROS_INFO("Parallel planning in distinctive topologies enabled.");
@@ -118,7 +119,7 @@ void TebExtPlannerROS::initialize(std::string name, tf2_ros::Buffer* tf, costmap
     {
       planner_ = PlannerInterfacePtr(new TebOptimalPlanner(cfg_, &obstacles_, robot_model, visualization_, &via_points_));
       //planner_ = PlannerInterfacePtr(new TebOptimalPlanner(cfg_, &obstacles_, robot_model, visualization_, &via_points_, &nh_));
-      //planner_->setnh(nh);
+
       
 
       ROS_INFO("Parallel planning in distinctive topologies disabled.");
@@ -177,12 +178,20 @@ void TebExtPlannerROS::initialize(std::string name, tf2_ros::Buffer* tf, costmap
     validateFootprints(robot_model->getInscribedRadius(), robot_inscribed_radius_, cfg_.obstacles.min_obstacle_dist);
         
     // setup callback for custom obstacles
-    custom_obst_sub_ = nh.subscribe("obstacles", 1, &TebExtPlannerROS::customObstacleCB, this);
+    custom_obst_sub_ = nh.subscribe("/obstacles", 1, &TebExtPlannerROS::customObstacleCB, this);
 
     // setup callback for custom via-points
-    via_points_sub_ = nh.subscribe("via_points", 1, &TebExtPlannerROS::customViaPointsCB, this);
+    via_points_sub_ = nh.subscribe("/via_points", 1, &TebExtPlannerROS::customViaPointsCB, this);
 
-    dynamic_cast<TebOptimalPlanner*>(planner_.get())->setnh(nh);
+    // setup callback for custom via-points
+    body_angle_sub_ = nh.subscribe("/joint_states", 1, &TebExtPlannerROS::bodyAngleCB, this);
+
+
+
+        ROS_INFO("subs set up");
+
+    //dynamic_cast<TebOptimalPlanner*>(planner_.get())->setnh(nh);
+    //planner->setnh(nh)
     
     // initialize failure detector
     ros::NodeHandle nh_move_base("~");
@@ -194,6 +203,7 @@ void TebExtPlannerROS::initialize(std::string name, tf2_ros::Buffer* tf, costmap
     initialized_ = true;
 
     ROS_DEBUG("teb_ext_planner plugin initialized.");
+    
   }
   else
   {
@@ -245,7 +255,9 @@ uint32_t TebExtPlannerROS::computeVelocityCommands(const geometry_msgs::PoseStam
                                                      std::string &message)
 {
   // check if plugin initialized
-    //ROS_INFO("movement gros");
+    //ROS_INFO("movement computeVelcom");
+    planner_->setBodyAngle(bodyAngle);
+    
     //backwardsplaning();
 
   if(!initialized_)
@@ -266,6 +278,8 @@ uint32_t TebExtPlannerROS::computeVelocityCommands(const geometry_msgs::PoseStam
   geometry_msgs::PoseStamped robot_pose;
   costmap_ros_->getRobotPose(robot_pose);
   robot_pose_ = PoseSE2(robot_pose.pose);
+
+  
     
   // Get robot velocity
   geometry_msgs::PoseStamped robot_vel_tf;
@@ -458,6 +472,9 @@ uint32_t TebExtPlannerROS::computeVelocityCommands(const geometry_msgs::PoseStam
   
   // a feasible solution should be found, reset counter
   no_infeasible_plans_ = 0;
+
+  //stops robot from moving
+  cmd_vel.twist.linear.x = cmd_vel.twist.linear.y = cmd_vel.twist.angular.z = 0;
   
   // store last command (for recovery analysis etc.)
   last_cmd_ = cmd_vel.twist;
@@ -468,6 +485,8 @@ uint32_t TebExtPlannerROS::computeVelocityCommands(const geometry_msgs::PoseStam
   visualization_->publishViaPoints(via_points_);
   visualization_->publishGlobalPlan(global_plan_);
   return mbf_msgs::ExePathResult::SUCCESS;
+  
+  
 }
 
 
@@ -1028,12 +1047,15 @@ void TebExtPlannerROS::configureBackupModes(std::vector<geometry_msgs::PoseStamp
      
 void TebExtPlannerROS::customObstacleCB(const costmap_converter::ObstacleArrayMsg::ConstPtr& obst_msg)
 {
+  ROS_INFO("Obstacel CB");
   boost::mutex::scoped_lock l(custom_obst_mutex_);
   custom_obstacle_msg_ = *obst_msg;  
 }
 
 void TebExtPlannerROS::customViaPointsCB(const nav_msgs::Path::ConstPtr& via_points_msg)
 {
+  ROS_INFO("Obstacel CB");
+
   ROS_INFO_ONCE("Via-points received. This message is printed once.");
   if (cfg_.trajectory.global_plan_viapoint_sep > 0)
   {
@@ -1229,6 +1251,40 @@ void TebExtPlannerROS::backwardsplaning(){
   ROS_INFO("backwardsplaning__teb_ext_planner");
 
 }
+
+void TebExtPlannerROS::bodyAngleCB(const sensor_msgs::JointState::ConstPtr& msg)
+{
+  std::string target_joint_name = "j_revolute_front_rear";
+
+  
+  // Find the index of the target joint in the name array
+  int target_joint_index = -1;
+  for (size_t i = 0; i < msg->name.size(); ++i)
+  {
+    if (msg->name[i] == target_joint_name)
+    {
+      target_joint_index = i;
+      break;
+    }
+  }
+  
+  if (target_joint_index != -1)
+  {
+
+    bodyAngle = msg->position[target_joint_index];
+
+    //dynamic_cast<TebOptimalPlanner*>(planner_.get())->setBodyAngle(bodyAngle);
+    //ROS_INFO("doby angle %f", bodyAngle);
+  }
+  else
+  {
+    ROS_INFO("kein bodyAngle");
+  }
+
+  }
+
+
+
 
 } // end namespace teb_ext_planner
 

@@ -392,7 +392,7 @@ bool TimedElasticBand::initTrajectoryToGoal(const PoseSE2& start, const PoseSE2&
 
 bool TimedElasticBand::initTrajectoryToGoal(const std::vector<geometry_msgs::PoseStamped>& plan, double max_vel_x, double max_vel_theta, bool estimate_orient, int min_samples, bool guess_backwards_motion)
 {
-  ROS_INFO("initTrajectoryToGoal z391");
+  //ROS_INFO("initTrajectoryToGoal z391");
   std::ofstream outputFile;
   outputFile.open("//home/martin/Documents/Master/Thesis/Team_Flori/log_file.txt",std::ios::trunc);
   outputFile.close();

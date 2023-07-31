@@ -20,6 +20,14 @@
 
   <rosparam file="$(find floribot_simulation)/config/joints.yaml" command="load"/> 
   
+  
+  <!-- map server -->
+
+  <arg name="map_file" default="$(find floribot_simulation)/maps/testmap.yaml"/>
+
+  <!-- Run the map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
  
 
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)" />
@@ -84,12 +92,6 @@
     <param name="range_max" value="25.0"/>
   </node>
 
-<!-- map server -->
-
-  <arg name="map_file" default="$(find floribot_simulation)/maps/testmap.yaml"/>
-
-  <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- amcl -->
 
@@ -103,8 +105,8 @@
     <param name="base_global_planner" value="rrt_star_global_planner/RRTStarPlanner" /> -->
 		<param name="base_global_planner" value="global_planner/GlobalPlanner" /> 
 		<!-- <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" /> -->
-     <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /> 
-    <!--param name="base_local_planner" value="teb_ext_planner/TebExtPlannerROS" /-->
+     <!--param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" /--> 
+    <param name="base_local_planner" value="teb_ext_planner/TebExtPlannerROS" />
 
 		<rosparam file="$(find floribot_simulation)/param/common_costmap_params.yaml" command="load" ns="global_costmap" />
 		<rosparam file="$(find floribot_simulation)/param/common_costmap_params.yaml" command="load" ns="local_costmap" /> 

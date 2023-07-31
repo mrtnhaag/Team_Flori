@@ -1346,60 +1346,94 @@ bool TebOptimalPlanner::isTrajectoryFeasible(base_local_planner::CostmapModel* c
 }
 
  void TebOptimalPlanner::AddBackwardsEdges(){
-    //ROS_INFO("AddBackwardsEdges");
+  ROS_INFO("AddBackwardsEdges %f",bodyAngle);
       // create edge for satisfiying kinematic constraints
+
+  // Eigen::Matrix<double,2,2> information_backwards;
+  // information_backwards(0,0)=cfg_->optim.weight_rev_path;
+  // information_backwards(1,1)=cfg_->optim.weight_rev_theta;
+  // information_backwards(0,1) = information_backwards(1,0) = 0;
   Eigen::Matrix<double,1,1> information_backwards;
-  //information_backwards.fill(cfg_->optim.weight_rev_path);
-  information_backwards.fill(5);
+  information_backwards.fill(cfg_->optim.weight_rev_path);
 
-  for (int i=0; i < teb_.sizePoses()-1 ; ++i) 
-  {
-    EdgeMotionRev* backwards_edge = new EdgeMotionRev;
-    backwards_edge->setVertex(0,teb_.PoseVertex(i));
-    backwards_edge->setVertex(1,teb_.PoseVertex(i+1));      
-    backwards_edge->setTeb(teb_);
-    //backwards_edge->setBodyAngle(bodyAngle);
-    
-    backwards_edge->setInformation(information_backwards);
-    
-    
-    optimizer_->addEdge(backwards_edge);
-  }
- } 
 
-void TebOptimalPlanner::BodyAngleCB(const sensor_msgs::JointState::ConstPtr& msg) 
-  {
-  std::string target_joint_name = "j_revolute_front_rear";
-  ROS_INFO("body angle CB");
+  double achsabs = 0.383;
+  Eigen::Vector2d rearPose; 
+  double rearAngle;
+  Eigen::Vector2d trajectoryPose; 
+  double trajectoryAngle;
+  Eigen::Vector2d frontPose; 
+  double frontAngle;
+  Eigen::Vector2d jointPose; 
+  PoseSE2 frontConf;
+  PoseSE2 trayConf;
+  double closest_dist =100;
+  int closest_conf = -1;
   
-  // Find the index of the target joint in the name array
-  int target_joint_index = -1;
-  for (size_t i = 0; i < msg->name.size(); ++i)
+
+
+  Eigen::Vector2d deltaS = teb_.Pose(0).position() - teb_.Pose(teb_.sizePoses()).position();
+  double distGoal = deltaS.norm();
+
+
+  //for (int i=0; i < teb_.sizePoses()-1 ; ++i) 
+  for (int i=0; i < cfg_->optim.weight_rev_path && i < teb_.sizePoses()-2; ++i)
   {
-    if (msg->name[i] == target_joint_name)
+    frontAngle = teb_.Pose(0).theta();
+    frontPose = teb_.Pose(0).position();
+    //if (distGoal> 1.5)
+  if(i=teb_.sizePoses()-1)
+    break;
+  rearAngle = std::fmod((frontAngle+ bodyAngle),(2*M_PI));
+
+  if(frontAngle>M_PI)
     {
-      target_joint_index = i;
-      break;
+    jointPose[0] = -std::sin(frontAngle-2*M_PI)*achsabs + frontPose[0];
+    jointPose[1] = -std::cos(frontAngle-2*M_PI)*achsabs + frontPose[1];
     }
-  }
-  
-  if (target_joint_index != -1)
-  {
-
-    bodyAngle = msg->position[target_joint_index];
-
-  }
   else
   {
-    //ROS_INFO("kein bodyAngle")
+    jointPose[0] = -std::sin(frontAngle)*achsabs + frontPose[0];
+    jointPose[1] = -std::cos(frontAngle)*achsabs + frontPose[1];
   }
 
-  }
-
-  void TebOptimalPlanner::setnh(ros::NodeHandle& nh)
+  if(rearAngle>M_PI)
+    {
+    rearPose[0] = std::sin(rearAngle-2*M_PI)*achsabs + jointPose[0];
+    rearPose[1] = std::cos(rearAngle-2*M_PI)*achsabs + jointPose[1];
+    }
+  else
   {
-    nh_ = &nh;
-    ROS_INFO("nh got set");
+    rearPose[0] = std::sin(rearAngle)*achsabs + jointPose[0];
+    rearPose[1] = std::cos(rearAngle)*achsabs + jointPose[1];
+  }
+
+  // for (int j = i; j < teb_.sizePoses()-1; ++j)
+  // {
+  //   deltaS = teb_.Pose(j).position() - rearPose;
+  //   double distrear_tray = deltaS.norm();
+  //   if (distrear_tray< closest_conf)
+  //   {
+  //     closest_conf =j;
+  //     closest_dist = distrear_tray;
+  //   }
+  // }
+  trajectoryPose = teb_.Pose(closest_conf).position();
+  trajectoryAngle = teb_.Pose(closest_conf).theta();
+  EdgeMotionRev* backwards_edge = new EdgeMotionRev;
+  backwards_edge->setVertex(0,teb_.PoseVertex(i));
+  backwards_edge->setInformation(information_backwards);
+  backwards_edge->setParams(rearPose, rearAngle, trajectoryPose, trajectoryAngle,cfg_->optim.weight_rev_path,cfg_->optim.weight_rev_theta);
+    
+  optimizer_->addEdge(backwards_edge);
+ }
+ } 
+
+
+  void TebOptimalPlanner::setBodyAngle(double angle)
+  {
+    bodyAngle = angle;
+    //ROS_INFO("angle got set%f",angle);
   }
 
 } // namespace teb_ext_planner

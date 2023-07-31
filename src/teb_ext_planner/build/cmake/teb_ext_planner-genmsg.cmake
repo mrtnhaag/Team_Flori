@@ -19,17 +19,17 @@ add_custom_target(teb_ext_planner_generate_messages ALL)
 
 get_filename_component(_filename "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg" NAME_WE)
 add_custom_target(_teb_ext_planner_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "teb_ext_planner" "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg" "geometry_msgs/Vector3:geometry_msgs/Point:geometry_msgs/Quaternion:geometry_msgs/Pose:geometry_msgs/Twist"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "teb_ext_planner" "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg" "geometry_msgs/Vector3:geometry_msgs/Pose:geometry_msgs/Twist:geometry_msgs/Quaternion:geometry_msgs/Point"
 )
 
 get_filename_component(_filename "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg" NAME_WE)
 add_custom_target(_teb_ext_planner_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "teb_ext_planner" "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg" "teb_ext_planner/TrajectoryPointMsg:geometry_msgs/Vector3:geometry_msgs/Point:geometry_msgs/Quaternion:geometry_msgs/Pose:geometry_msgs/Twist:std_msgs/Header"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "teb_ext_planner" "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg" "geometry_msgs/Vector3:geometry_msgs/Pose:teb_ext_planner/TrajectoryPointMsg:std_msgs/Header:geometry_msgs/Twist:geometry_msgs/Quaternion:geometry_msgs/Point"
 )
 
 get_filename_component(_filename "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/FeedbackMsg.msg" NAME_WE)
 add_custom_target(_teb_ext_planner_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "teb_ext_planner" "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/FeedbackMsg.msg" "costmap_converter/ObstacleMsg:teb_ext_planner/TrajectoryMsg:teb_ext_planner/TrajectoryPointMsg:geometry_msgs/Vector3:geometry_msgs/Polygon:geometry_msgs/Point:geometry_msgs/Quaternion:geometry_msgs/Point32:geometry_msgs/TwistWithCovariance:geometry_msgs/Pose:geometry_msgs/Twist:std_msgs/Header:costmap_converter/ObstacleArrayMsg"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "teb_ext_planner" "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/FeedbackMsg.msg" "geometry_msgs/TwistWithCovariance:geometry_msgs/Vector3:geometry_msgs/Pose:costmap_converter/ObstacleArrayMsg:teb_ext_planner/TrajectoryPointMsg:geometry_msgs/Point32:costmap_converter/ObstacleMsg:std_msgs/Header:geometry_msgs/Twist:geometry_msgs/Quaternion:geometry_msgs/Polygon:teb_ext_planner/TrajectoryMsg:geometry_msgs/Point"
 )
 
 #
@@ -41,19 +41,19 @@ add_custom_target(_teb_ext_planner_generate_messages_check_deps_${_filename}
 _generate_msg_cpp(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_cpp(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_cpp(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/FeedbackMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/teb_ext_planner
 )
 
@@ -90,19 +90,19 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS teb_ext_planner_generate_messages_c
 _generate_msg_eus(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_eus(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_eus(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/FeedbackMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/teb_ext_planner
 )
 
@@ -139,19 +139,19 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS teb_ext_planner_generate_messages_e
 _generate_msg_lisp(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_lisp(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_lisp(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/FeedbackMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/teb_ext_planner
 )
 
@@ -188,19 +188,19 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS teb_ext_planner_generate_messages_l
 _generate_msg_nodejs(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_nodejs(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_nodejs(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/FeedbackMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/teb_ext_planner
 )
 
@@ -237,19 +237,19 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS teb_ext_planner_generate_messages_n
 _generate_msg_py(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_py(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg"
   "${MSG_I_FLAGS}"
-  "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/teb_ext_planner
 )
 _generate_msg_py(teb_ext_planner
   "/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/FeedbackMsg.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/TwistWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Vector3.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleArrayMsg.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryPointMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point32.msg;/opt/ros/noetic/share/costmap_converter/cmake/../msg/ObstacleMsg.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Twist.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Polygon.msg;/home/martin/Documents/Master/Thesis/Team_Flori/src/teb_ext_planner/msg/TrajectoryMsg.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/teb_ext_planner
 )
 

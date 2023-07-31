@@ -196,6 +196,10 @@ public:
    * @brief Returns true if the planner has diverged.
    */
   virtual bool hasDiverged() const = 0;
+
+  virtual void setBodyAngle(double angle)
+  {
+  }
                 
 };
 
